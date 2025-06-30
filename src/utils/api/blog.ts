@@ -10,3 +10,8 @@ export async function getBlogById(id: string) : Promise<BlogDetailsResponse> {
     const res = await api.get(`/blogs/${id}`);
     return res.data;
 }
+
+export async function getBlogsByUserId(userId: string) {
+  const res = await api.get(`/blogs/search?userId=${userId}`);
+  return res.data;
+}

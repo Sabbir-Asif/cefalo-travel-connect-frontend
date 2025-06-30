@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
                 {
                     isAuthenticated &&
                     <div className="hover:bg-primary p-2 rounded-full">
-                        <Link to='dashboard'>
+                        <Link to={`/dashboard/${user?.id}`}>
                             Dashboard
                         </Link>
                     </div>
