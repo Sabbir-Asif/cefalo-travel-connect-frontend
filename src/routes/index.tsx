@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
+import Login from "../pages/auth/Login";
+import Signup from "../pages/auth/Signup";
 import UserProfile from "../pages/UserProfile";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
-import CreateBlogPage from "../pages/CreateBlog";
+import CreateBlogPage from "../pages/blog/CreateBlog";
 import Blogs from "../components/blog/Blogs";
 import BlogPage from "../components/blog/BlogPage";
 

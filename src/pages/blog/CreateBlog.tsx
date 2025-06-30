@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import MDEditor from "@uiw/react-md-editor";
-import type { CreateBlog } from "../types/Blog";
-import { uploadImageToCloudinary } from "../utils/cloudinary";
+import type { CreateBlog } from "../../types/Blog";
+import { uploadImageToCloudinary } from "../../utils/cloudinary";
 
 const CreateBlogPage: React.FC = () => {
   const [content, setContent] = useState<string>("");
