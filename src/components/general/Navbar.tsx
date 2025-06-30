@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../context/useAuth";
 
 const Navbar: React.FC = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const navigate = useNavigate();
 
     const handleProfileClick = () => {
@@ -23,6 +23,16 @@ const Navbar: React.FC = () => {
             <button onClick={handleCreateBlogClick} className="btn btn-ghost">
                 Create Blog
             </button>
+            <div className="">
+                {
+                    user?.role === 'ADMIN' &&
+                    <div className="hover:bg-primary p-2 rounded-full">
+                        <Link to='admin-dashboard'>
+                            Admin Dashboard
+                        </Link>
+                    </div>
+                }
+            </div>
             <div className="justify-end">
                 {isAuthenticated ? (
                     <button onClick={handleProfileClick} className="btn btn-primary">
