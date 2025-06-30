@@ -4,6 +4,9 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import UserProfile from "../pages/UserProfile";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
+import CreateBlogPage from "../pages/CreateBlog";
+import Blogs from "../components/blog/Blogs";
+import BlogPage from "../components/blog/BlogPage";
 
 const router = createBrowserRouter([
     {
@@ -22,9 +25,21 @@ const router = createBrowserRouter([
                 element: <ProtectedRoute />,
                 children: [
                     {
+                        index: true,
+                        element: <Blogs />
+                    },
+                    {
                         path: 'profile',
                         element: <UserProfile />
                     },
+                    {
+                        path: 'create-blog',
+                        element: <CreateBlogPage />
+                    },
+                    {
+                        path: 'blogs/:blogId',
+                        element: <BlogPage />
+                    }
                 ]
             }
         ]
