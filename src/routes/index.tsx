@@ -9,6 +9,7 @@ import Blogs from "../components/blog/Blogs";
 import BlogPage from "../components/blog/BlogPage";
 import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import AdminRoute from "../components/auth/AdminRoute";
+import UserDashboard from "../pages/dashboard/UserDashboard";
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
                     {
                         path: 'blogs/:blogId',
                         element: <BlogPage />
+                    },
+                    {
+                        path: '/dashboard',
+                        element: <UserDashboard />
                     },
                     {
                         element: <AdminRoute />,

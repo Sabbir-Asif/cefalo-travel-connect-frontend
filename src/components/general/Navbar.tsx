@@ -25,6 +25,16 @@ const Navbar: React.FC = () => {
             </button>
             <div className="">
                 {
+                    isAuthenticated &&
+                    <div className="hover:bg-primary p-2 rounded-full">
+                        <Link to='dashboard'>
+                            Dashboard
+                        </Link>
+                    </div>
+                }
+            </div>
+            <div className="">
+                {
                     user?.role === 'ADMIN' &&
                     <div className="hover:bg-primary p-2 rounded-full">
                         <Link to='admin-dashboard'>

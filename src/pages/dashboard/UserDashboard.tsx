@@ -1,0 +1,9 @@
+const UserDashboard = () => {
+    return (
+        <div>
+            <h2>User dashboard</h2>
+        </div>
+    );
+};
+
+export default UserDashboard;
