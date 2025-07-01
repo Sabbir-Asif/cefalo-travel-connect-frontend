@@ -1,4 +1,4 @@
-import type { Blog, BlogDetailsResponse } from "../../types/Blog";
+import type { Blog, BlogDetailsResponse, CreateBlog } from "../../types/Blog";
 import { api } from "../axios";
 
 export async function getAllBlogsAPI(): Promise<Blog[]> {
@@ -13,5 +13,10 @@ export async function getBlogById(id: string) : Promise<BlogDetailsResponse> {
 
 export async function getBlogsByUserId(userId: string) {
   const res = await api.get(`/blogs/search?userId=${userId}`);
+  return res.data;
+}
+
+export async function createBlogAPI(blogData: CreateBlog): Promise<Blog> {
+  const res = await api.post('/blogs', blogData);
   return res.data;
 }

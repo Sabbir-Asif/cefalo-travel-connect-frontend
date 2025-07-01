@@ -30,6 +30,7 @@ export interface CreateBlog {
         lat: number;
         long: number;
     };
+    cover_image?: string;
     description: string;
     tags?: string[];
     images?: string[];
