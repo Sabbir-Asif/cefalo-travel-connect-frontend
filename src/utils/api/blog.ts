@@ -20,3 +20,8 @@ export async function createBlogAPI(blogData: CreateBlog): Promise<Blog> {
   const res = await api.post('/blogs', blogData);
   return res.data;
 }
+
+export async function updateBlogAPI(blogId: string, updateData: Partial<Blog>): Promise<Blog> {
+  const res = await api.put(`/blogs/${blogId}`, updateData);
+  return res.data;
+}

@@ -12,23 +12,33 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
         navigate(`/blogs/${blog.id}`);
     }
     return (
-        <div className="border rounded-xl shadow-md p-4 bg-white">
-            <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
-            <p className="text-sm text-gray-500 mb-1">{blog.locationName}</p>
-            <p className="text-gray-700 mb-2">{blog.description}</p>
-            <div className="flex flex-wrap gap-2 text-xs text-white">
-                {blog.tags.map((tag, index) => (
-                    <span key={index} className="bg-blue-500 px-2 py-1 rounded">
-                        #{tag}
-                    </span>
-                ))}
+        <div className="card bg-base-100 w-96 shadow-sm">
+            <figure>
+                <img
+                    src={blog.cover_image || ""}
+                    alt="Shoes" />
+            </figure>
+            <div className="card-body">
+                <h2 className="card-title">
+                    {blog.title}
+                    <div className="badge badge-secondary">NEW</div>
+                </h2>
+                <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                <div className="flex justify-between items-center">
+                    <button
+                        className="btn btn-primary"
+                        onClick={handleClick}
+                    >Details
+                    </button>
+                    <div className="card-actions">
+                        {
+                            blog.tags && blog.tags.map(tag =>
+                                <div className="badge badge-outline">{tag}</div>
+                            )
+                        }
+                    </div>
+                </div>
             </div>
-            <button
-                className="btn btn-primary"
-                onClick={handleClick}
-            >
-                view details
-            </button>
         </div>
     );
 };

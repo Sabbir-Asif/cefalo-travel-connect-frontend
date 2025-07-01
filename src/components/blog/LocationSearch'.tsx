@@ -269,8 +269,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
                     </span>
                 </label>
             )}
-
-            {/* Confirmation Modal */}
+            
             <dialog id="location_confirm_modal" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg mb-4 flex items-center gap-2">

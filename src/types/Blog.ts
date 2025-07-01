@@ -2,6 +2,7 @@ import type { BlogInsight } from "./BlogInsight";
 import type { Food } from "./Food";
 import type { Lodge } from "./Lodge";
 import type { Transport } from "./Transport";
+import type { UserResponse } from "./User";
 
 export type BlogStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
@@ -43,4 +44,5 @@ export interface BlogDetailsResponse {
     lodges: Lodge[];
     food: Food[];
     insights: BlogInsight[];
+    creator: UserResponse;
 }

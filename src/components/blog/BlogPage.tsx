@@ -1,125 +1,501 @@
-import { useEffect, useState } from "react";
-import { getBlogById } from "../../utils/api/blog";
-import { useParams } from "react-router";
-import type { Blog } from "../../types/Blog";
-import type { Transport } from "../../types/Transport";
-import type { Lodge } from "../../types/Lodge";
-import type { Food } from "../../types/Food";
-import type { BlogInsight } from "../../types/BlogInsight";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
+import { MapLocationPicker } from './MapLocationPicker';
+import { MarkdownEditor } from './MarkdownEditor';
+import { TagInput } from './TagInput';
+import { getBlogById, updateBlogAPI } from '../../utils/api/blog';
+import type { Blog } from '../../types/Blog';
+import { isAxiosError } from 'axios';
+import type { Transport } from '../../types/Transport';
+import type { Lodge } from '../../types/Lodge';
+import type { Food } from '../../types/Food';
+import type { BlogInsight } from '../../types/BlogInsight';
+import { LocationSearch } from './LocationSearch\'';
+import MarkdownRenderer from './MarkdownRenderer';
+import type { UserResponse } from '../../types/User';
 
-interface BlogDetailsResponse {
-    blog: Blog;
-    transports: Transport[];
-    lodges: Lodge[];
-    food: Food[];
-    insights: BlogInsight[];
-}
-
-const BlogPage = () => {
+const BlogPage: React.FC = () => {
     const { blogId } = useParams<{ blogId: string }>();
-    const [blogData, setBlogData] = useState<BlogDetailsResponse | null>(null);
+    const [blogData, setBlogData] = useState<{
+        blog: Blog;
+        transports: Transport[];
+        lodges: Lodge[];
+        food: Food[];
+        insights: BlogInsight[];
+        creator: UserResponse;
+    } | null>(null);
+
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>('');
+    const [isEditing, setIsEditing] = useState<{
+        title: boolean;
+        coverImage: boolean;
+        tags: boolean;
+        content: boolean;
+        location: boolean;
+    }>({
+        title: false,
+        coverImage: false,
+        tags: false,
+        content: false,
+        location: false
+    });
+
+    const [editData, setEditData] = useState<{
+        title: string;
+        coverImage: string;
+        tags: string[];
+        content: string;
+        locationName: string;
+        locationPoints: { lat: number; long: number };
+    }>({
+        title: '',
+        coverImage: '',
+        tags: [],
+        content: '',
+        locationName: '',
+        locationPoints: { lat: 0, long: 0 }
+    });
+
+    const [isMapOpen, setIsMapOpen] = useState(false);
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
-        const fetchBlog = async () => {
-            try {
-                if (!blogId) return;
-                const data: BlogDetailsResponse= await getBlogById(blogId);
-                setBlogData(data);
-            } catch (err) {
-                console.error("Failed to fetch blog:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBlog();
+        if (blogId) {
+            loadBlogData();
+        }
     }, [blogId]);
 
-    if (loading) return <div className="p-4">Loading...</div>;
-    if (!blogData) return <div className="p-4">Blog not found.</div>;
+    const loadBlogData = async () => {
+        try {
+            setLoading(true);
+            const data = await getBlogById(blogId!);
+            setBlogData(data);
 
-    const { blog, transports, lodges, food, insights } = blogData;
+            setEditData({
+                title: data.blog.title,
+                coverImage: data.blog.cover_image || '',
+                tags: data.blog.tags || [],
+                content: data.blog.description,
+                locationName: data.blog.locationName,
+                locationPoints: data.blog.location_points
+            });
+        } catch (err) {
+            setError('Failed to load blog data');
+            console.error('Error loading blog:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleLocationSelect = (location: { name: string; lat: number; long: number }) => {
+        setEditData(prev => ({
+            ...prev,
+            locationName: location.name,
+            locationPoints: {
+                lat: location.lat,
+                long: location.long
+            }
+        }));
+    };
+
+    const handleUpdate = async (field: keyof typeof isEditing) => {
+        if (!blogData) return;
+
+        try {
+            setUpdating(true);
+            let updatePayload: Partial<Blog> = {};
+
+            switch (field) {
+                case 'title':
+                    updatePayload = { title: editData.title };
+                    break;
+                case 'coverImage':
+                    updatePayload = { cover_image: editData.coverImage };
+                    break;
+                case 'tags':
+                    updatePayload = { tags: editData.tags };
+                    break;
+                case 'content':
+                    updatePayload = { description: editData.content };
+                    break;
+                case 'location':
+                    updatePayload = {
+                        locationName: editData.locationName,
+                        location_points: editData.locationPoints
+                    };
+                    break;
+            }
+
+            const updatedBlog = await updateBlogAPI(blogData.blog.id, updatePayload);
+
+            setBlogData(prev => prev ? { ...prev, blog: updatedBlog } : null);
+            setIsEditing(prev => ({ ...prev, [field]: false }));
+
+        } catch (err) {
+            let errorMessage = 'Failed to update blog';
+            if (isAxiosError(err) && err.response?.data?.message) {
+                errorMessage = err.response.data.message;
+            }
+            setError(errorMessage);
+        } finally {
+            setUpdating(false);
+        }
+    };
+
+    const handleCancel = (field: keyof typeof isEditing) => {
+        if (!blogData) return;
+
+        // Reset edit data to original values
+        setEditData(prev => ({
+            ...prev,
+            title: blogData.blog.title,
+            coverImage: blogData.blog.cover_image || '',
+            tags: blogData.blog.tags || [],
+            content: blogData.blog.description,
+            locationName: blogData.blog.locationName,
+            locationPoints: blogData.blog.location_points
+        }));
+
+        setIsEditing(prev => ({ ...prev, [field]: false }));
+    };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="loading loading-spinner loading-lg"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="max-w-4xl mx-auto p-6">
+                <div className="alert alert-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{error}</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (!blogData) {
+        return (
+            <div className="max-w-4xl mx-auto p-6">
+                <div className="alert alert-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <span>Blog not found</span>
+                </div>
+            </div>
+        );
+    }
+
+    const { blog } = blogData;
 
     return (
-        <div className="p-6 space-y-6">
-            <h1 className="text-3xl font-bold">{blog.title}</h1>
-            <p className="text-gray-600">{blog.locationName}</p>
-            <p className="mt-2 text-lg">{blog.description}</p>
+        <div className="max-w-6xl mx-auto p-6">
+            <div className="card bg-base-100 shadow-xl">
+                <div className="card-body">
+                    {/* Cover Image Section */}
+                    <div className="mb-8">
+                        {!isEditing.coverImage ? (
+                            <div className="relative group">
+                                {blog.cover_image ? (
+                                    <img
+                                        src={blog.cover_image}
+                                        alt={blog.title}
+                                        className="w-full h-80 object-cover rounded-lg"
+                                    />
+                                ) : (
+                                    <div className="w-full h-80 bg-base-200 rounded-lg flex items-center justify-center">
+                                        <span className="text-base-content/60">No cover image</span>
+                                    </div>
+                                )}
+                                <button
+                                    className="absolute top-4 right-4 btn btn-sm btn-circle btn-primary opacity-0 group-hover:opacity-100 transition-opacity"
+                                    onClick={() => setIsEditing(prev => ({ ...prev, coverImage: true }))}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text font-medium">Cover Image URL</span>
+                                    </label>
+                                    <input
+                                        type="url"
+                                        value={editData.coverImage}
+                                        onChange={(e) => setEditData(prev => ({ ...prev, coverImage: e.target.value }))}
+                                        placeholder="https://example.com/image.jpg"
+                                        className="input input-bordered w-full"
+                                    />
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => handleUpdate('coverImage')}
+                                        disabled={updating}
+                                    >
+                                        {updating ? 'Updating...' : 'Save'}
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-sm"
+                                        onClick={() => handleCancel('coverImage')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
-            <section>
-                <h2 className="text-xl font-semibold mt-6">Transports</h2>
-                {transports.length === 0 ? (
-                    <p className="text-gray-500">No transport information available.</p>
-                ) : (
-                    <ul className="space-y-2">
-                        {transports.map((transport) => (
-                            <li key={transport.id} className="border p-4 rounded-md">
-                                <p><strong>Type:</strong> {transport.type}</p>
-                                <p><strong>Name:</strong> {transport.name}</p>
-                                <p><strong>From:</strong> {transport.starting_location} → <strong>To:</strong> {transport.destination}</p>
-                                <p><strong>Departure:</strong> {new Date(transport.departure_time!).toLocaleString()}</p>
-                                <p><strong>Arrival:</strong> {new Date(transport.arrival_time!).toLocaleString()}</p>
-                                <p><strong>Fare:</strong> ৳{transport.fare}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </section>
+                    {/* Title Section */}
+                    <div className="mb-6">
+                        {!isEditing.title ? (
+                            <div className="flex items-center gap-4 group">
+                                <h1 className="text-4xl font-bold flex-1">{blog.title}</h1>
+                                <button
+                                    className="btn btn-sm btn-ghost opacity-0 group-hover:opacity-100 transition-opacity"
+                                    onClick={() => setIsEditing(prev => ({ ...prev, title: true }))}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <input
+                                    type="text"
+                                    value={editData.title}
+                                    onChange={(e) => setEditData(prev => ({ ...prev, title: e.target.value }))}
+                                    className="input input-bordered w-full text-2xl"
+                                    placeholder="Blog title..."
+                                />
+                                <div className="flex gap-2">
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => handleUpdate('title')}
+                                        disabled={updating}
+                                    >
+                                        {updating ? 'Updating...' : 'Save'}
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-sm"
+                                        onClick={() => handleCancel('title')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
-            <section>
-                <h2 className="text-xl font-semibold mt-6">Lodges</h2>
-                {lodges.length === 0 ? (
-                    <p className="text-gray-500">No lodge information available.</p>
-                ) : (
-                    <ul className="space-y-2">
-                        {lodges.map((lodge) => (
-                            <li key={lodge.id} className="border p-4 rounded-md">
-                                <p><strong>Name:</strong> {lodge.name}</p>
-                                <p><strong>Location:</strong> {lodge.location_name}</p>
-                                <p><strong>Price:</strong> ৳{lodge.price}</p>
-                                {lodge.description && <p>{lodge.description}</p>}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </section>
+                    {/* Location Section */}
+                    <div className="mb-6">
+                        {!isEditing.location ? (
+                            <div className="flex items-center gap-2 group">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span className="text-lg text-base-content/80">{blog.locationName}</span>
+                                <span className="text-sm text-base-content/60">
+                                    ({blog.location_points.lat.toFixed(4)}, {blog.location_points.long.toFixed(4)})
+                                </span>
+                                <button
+                                    className="btn btn-sm btn-ghost opacity-0 group-hover:opacity-100 transition-opacity"
+                                    onClick={() => setIsEditing(prev => ({ ...prev, location: true }))}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <div className="flex gap-2">
+                                    <div className="flex-1">
+                                        <LocationSearch
+                                            onLocationSelect={handleLocationSelect}
+                                            placeholder="Search for a location..."
+                                            value={editData.locationName}
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline btn-primary"
+                                        onClick={() => setIsMapOpen(true)}
+                                    >
+                                        Select on Map
+                                    </button>
+                                </div>
 
-            <section>
-                <h2 className="text-xl font-semibold mt-6">Food</h2>
-                {food.length === 0 ? (
-                    <p className="text-gray-500">No food entries available.</p>
-                ) : (
-                    <ul className="space-y-2">
-                        {food.map((item) => (
-                            <li key={item.id} className="border p-4 rounded-md">
-                                <p><strong>Name:</strong> {item.name}</p>
-                                <p><strong>Category:</strong> {item.category}</p>
-                                <p><strong>Provider:</strong> {item.provider}</p>
-                                <p><strong>Location:</strong> {item.location}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </section>
+                                {editData.locationName && (
+                                    <div className="bg-base-200 p-3 rounded-lg text-sm">
+                                        <div className="font-medium">{editData.locationName}</div>
+                                        <div className="text-base-content/70">
+                                            {editData.locationPoints.lat.toFixed(6)}, {editData.locationPoints.long.toFixed(6)}
+                                        </div>
+                                    </div>
+                                )}
 
-            <section>
-                <h2 className="text-xl font-semibold mt-6">Insights</h2>
-                {insights.length === 0 ? (
-                    <p className="text-gray-500">No insights provided.</p>
-                ) : (
-                    <ul className="space-y-2">
-                        {insights.map((insight) => (
-                            <li key={insight.id} className="border p-4 rounded-md">
-                                <p><strong>{insight.label}</strong></p>
-                                <p>{insight.data}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </section>
+                                <div className="flex gap-2">
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => handleUpdate('location')}
+                                        disabled={updating}
+                                    >
+                                        {updating ? 'Updating...' : 'Save'}
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-sm"
+                                        onClick={() => handleCancel('location')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Tags Section */}
+                    <div className="mb-8">
+                        {!isEditing.tags ? (
+                            <div className="group">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-sm font-medium text-base-content/70">Tags:</span>
+                                    <button
+                                        className="btn btn-xs btn-ghost opacity-0 group-hover:opacity-100 transition-opacity"
+                                        onClick={() => setIsEditing(prev => ({ ...prev, tags: true }))}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    {blog.tags && blog.tags.length > 0 ? (
+                                        blog.tags.map((tag, index) => (
+                                            <span key={index} className="badge badge-primary badge-outline">
+                                                {tag}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="text-base-content/60 text-sm">No tags</span>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <TagInput
+                                    tags={editData.tags}
+                                    onChange={(tags) => setEditData(prev => ({ ...prev, tags }))}
+                                    placeholder="Add tags..."
+                                    maxTags={10}
+                                />
+                                <div className="flex gap-2">
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => handleUpdate('tags')}
+                                        disabled={updating}
+                                    >
+                                        {updating ? 'Updating...' : 'Save'}
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-sm"
+                                        onClick={() => handleCancel('tags')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="mb-6">
+                        {!isEditing.content ? (
+                            <div className="relative group">
+                                <button
+                                    className="absolute top-4 right-4 btn btn-sm btn-circle btn-primary opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                                    onClick={() => setIsEditing(prev => ({ ...prev, content: true }))}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </button>
+                                <div className="bg-base-50 p-6 rounded-lg border">
+                                    <MarkdownRenderer content={blog.description} />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <MarkdownEditor
+                                    value={editData.content}
+                                    onChange={(value) => setEditData(prev => ({ ...prev, content: value }))}
+                                    placeholder="Write your blog content in markdown..."
+                                    height={400}
+                                />
+                                <div className="flex gap-2">
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => handleUpdate('content')}
+                                        disabled={updating}
+                                    >
+                                        {updating ? 'Updating...' : 'Save'}
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-sm"
+                                        onClick={() => handleCancel('content')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Blog Meta Information */}
+                    <div className="border-t pt-6 mt-8">
+                        <div className="flex flex-wrap gap-4 text-sm text-base-content/60">
+                            <div className="flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                {/* <span>Created: {new Date(blog.created_at).toLocaleDateString()}</span> */}
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                <span>Updated: {new Date(blog.updated_at).toLocaleDateString()}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <span className={`badge ${blog.status === 'PUBLISHED' ? 'badge-success' : 'badge-warning'} badge-sm`}>
+                                    {blog.status}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <MapLocationPicker
+                isOpen={isMapOpen}
+                onClose={() => setIsMapOpen(false)}
+                onLocationSelect={handleLocationSelect}
+            />
         </div>
     );
 };
+
 
 export default BlogPage;
