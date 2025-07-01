@@ -19,27 +19,9 @@ const CreateBlogPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 py-8">
-      <div className="container mx-auto px-4">
-        <div className="breadcrumbs text-sm mb-6">
-          <ul>
-            <li>
-              <button onClick={() => navigate("/")} className="link link-hover">
-                Home
-              </button>
-            </li>
-            <li>
-              <button onClick={() => navigate("/blogs")} className="link link-hover">
-                Blogs
-              </button>
-            </li>
-            <li>Create Blog</li>
-          </ul>
-        </div>
-
+      <div className="">
         <CreateBlogForm onSuccess={handleSuccess} onError={handleError} />
       </div>
-    </div>
   );
 };
 

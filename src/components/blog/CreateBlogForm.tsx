@@ -102,7 +102,7 @@ export const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
 
     return (
         <div className="max-w-4xl mx-auto p-6">
-            <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-gray-100 shadow-xl">
                 <div className="card-body">
                     <h2 className="card-title text-2xl mb-6">Create New Blog</h2>
 
