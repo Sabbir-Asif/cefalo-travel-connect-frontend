@@ -10,6 +10,7 @@ import BlogPage from "../components/blog/BlogPage";
 import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import AdminRoute from "../components/auth/AdminRoute";
 import UserDashboard from "../pages/dashboard/UserDashboard";
+import LandingPage from "../pages/LandingPage";
 
 const router = createBrowserRouter([
     {
@@ -25,10 +26,14 @@ const router = createBrowserRouter([
         element: <Home />,
         children: [
             {
+                index: true,
+                element: <LandingPage />
+            },
+            {
                 element: <ProtectedRoute />,
                 children: [
                     {
-                        index: true,
+                        path: 'blogs',
                         element: <Blogs />
                     },
                     {

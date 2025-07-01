@@ -21,9 +21,9 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
             <div className="card-body">
                 <h2 className="card-title">
                     {blog.title}
-                    <div className="badge badge-secondary">NEW</div>
+                    {/* <div className="badge badge-secondary">NEW</div> */}
                 </h2>
-                <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                <p>{blog.locationName}</p>
                 <div className="flex justify-between items-center">
                     <button
                         className="btn btn-primary"

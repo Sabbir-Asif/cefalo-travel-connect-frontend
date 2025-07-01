@@ -4,7 +4,7 @@ import { MapLocationPicker } from './MapLocationPicker';
 import { MarkdownEditor } from './MarkdownEditor';
 import { TagInput } from './TagInput';
 import { getBlogById, updateBlogAPI } from '../../utils/api/blog';
-import type { Blog } from '../../types/Blog';
+import type { Blog, BlogStatus } from '../../types/Blog';
 import { isAxiosError } from 'axios';
 import type { Transport } from '../../types/Transport';
 import type { Lodge } from '../../types/Lodge';
@@ -33,12 +33,14 @@ const BlogPage: React.FC = () => {
         tags: boolean;
         content: boolean;
         location: boolean;
+        status: boolean;
     }>({
         title: false,
         coverImage: false,
         tags: false,
         content: false,
-        location: false
+        location: false,
+        status: false,
     });
 
     const [editData, setEditData] = useState<{
@@ -48,45 +50,48 @@ const BlogPage: React.FC = () => {
         content: string;
         locationName: string;
         locationPoints: { lat: number; long: number };
+        status: BlogStatus;
     }>({
         title: '',
         coverImage: '',
         tags: [],
         content: '',
         locationName: '',
-        locationPoints: { lat: 0, long: 0 }
+        locationPoints: { lat: 0, long: 0 },
+        status: 'DRAFT'
     });
 
     const [isMapOpen, setIsMapOpen] = useState(false);
     const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
+        const loadBlogData = async () => {
+            try {
+                setLoading(true);
+                const data = await getBlogById(blogId!);
+                setBlogData(data);
+
+                setEditData({
+                    title: data.blog.title,
+                    coverImage: data.blog.cover_image || '',
+                    tags: data.blog.tags || [],
+                    content: data.blog.description,
+                    locationName: data.blog.locationName,
+                    locationPoints: data.blog.location_points,
+                    status: data.blog.status
+                });
+            } catch (err) {
+                setError('Failed to load blog data');
+                console.error('Error loading blog:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         if (blogId) {
             loadBlogData();
         }
     }, [blogId]);
-
-    const loadBlogData = async () => {
-        try {
-            setLoading(true);
-            const data = await getBlogById(blogId!);
-            setBlogData(data);
-
-            setEditData({
-                title: data.blog.title,
-                coverImage: data.blog.cover_image || '',
-                tags: data.blog.tags || [],
-                content: data.blog.description,
-                locationName: data.blog.locationName,
-                locationPoints: data.blog.location_points
-            });
-        } catch (err) {
-            setError('Failed to load blog data');
-            console.error('Error loading blog:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleLocationSelect = (location: { name: string; lat: number; long: number }) => {
         setEditData(prev => ({
@@ -119,6 +124,9 @@ const BlogPage: React.FC = () => {
                 case 'content':
                     updatePayload = { description: editData.content };
                     break;
+                case 'status':
+                    updatePayload = { status: editData.status };
+                    break;
                 case 'location':
                     updatePayload = {
                         locationName: editData.locationName,
@@ -145,8 +153,6 @@ const BlogPage: React.FC = () => {
 
     const handleCancel = (field: keyof typeof isEditing) => {
         if (!blogData) return;
-
-        // Reset edit data to original values
         setEditData(prev => ({
             ...prev,
             title: blogData.blog.title,
@@ -154,7 +160,8 @@ const BlogPage: React.FC = () => {
             tags: blogData.blog.tags || [],
             content: blogData.blog.description,
             locationName: blogData.blog.locationName,
-            locationPoints: blogData.blog.location_points
+            locationPoints: blogData.blog.location_points,
+            status: blogData.blog.status,
         }));
 
         setIsEditing(prev => ({ ...prev, [field]: false }));
@@ -200,7 +207,6 @@ const BlogPage: React.FC = () => {
         <div className="max-w-6xl mx-auto p-6">
             <div className="card bg-base-100 shadow-xl">
                 <div className="card-body">
-                    {/* Cover Image Section */}
                     <div className="mb-8">
                         {!isEditing.coverImage ? (
                             <div className="relative group">
@@ -257,7 +263,6 @@ const BlogPage: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Title Section */}
                     <div className="mb-6">
                         {!isEditing.title ? (
                             <div className="flex items-center gap-4 group">
@@ -298,8 +303,6 @@ const BlogPage: React.FC = () => {
                             </div>
                         )}
                     </div>
-
-                    {/* Location Section */}
                     <div className="mb-6">
                         {!isEditing.location ? (
                             <div className="flex items-center gap-2 group">
@@ -367,7 +370,6 @@ const BlogPage: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Tags Section */}
                     <div className="mb-8">
                         {!isEditing.tags ? (
                             <div className="group">
@@ -421,7 +423,6 @@ const BlogPage: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Content Section */}
                     <div className="mb-6">
                         {!isEditing.content ? (
                             <div className="relative group">
@@ -464,14 +465,12 @@ const BlogPage: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Blog Meta Information */}
                     <div className="border-t pt-6 mt-8">
                         <div className="flex flex-wrap gap-4 text-sm text-base-content/60">
                             <div className="flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                {/* <span>Created: {new Date(blog.created_at).toLocaleDateString()}</span> */}
                             </div>
                             <div className="flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -479,10 +478,49 @@ const BlogPage: React.FC = () => {
                                 </svg>
                                 <span>Updated: {new Date(blog.updated_at).toLocaleDateString()}</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                                <span className={`badge ${blog.status === 'PUBLISHED' ? 'badge-success' : 'badge-warning'} badge-sm`}>
-                                    {blog.status}
-                                </span>
+                            <div className="flex items-center gap-2">
+                                {!isEditing.status ? (
+                                    <>
+                                        <span className={`badge ${blog.status === 'PUBLISHED' ? 'badge-success' : blog.status === 'ARCHIVED' ? 'badge-neutral' : 'badge-warning'} badge-sm`}>
+                                            {blog.status}
+                                        </span>
+                                        <button
+                                            className="btn btn-xs btn-ghost"
+                                            onClick={() => setIsEditing(prev => ({ ...prev, status: true }))}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center gap-2">
+                                        <select
+                                            className="select select-sm select-bordered"
+                                            value={editData.status}
+                                            onChange={(e) =>
+                                                setEditData(prev => ({ ...prev, status: e.target.value as BlogStatus }))
+                                            }
+                                        >
+                                            <option value="DRAFT">DRAFT</option>
+                                            <option value="PUBLISHED">PUBLISHED</option>
+                                            <option value="ARCHIVED">ARCHIVED</option>
+                                        </select>
+                                        <button
+                                            className="btn btn-primary btn-xs"
+                                            onClick={() => handleUpdate('status')}
+                                            disabled={updating}
+                                        >
+                                            {updating ? 'Saving...' : 'Save'}
+                                        </button>
+                                        <button
+                                            className="btn btn-ghost btn-xs"
+                                            onClick={() => handleCancel('status')}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
