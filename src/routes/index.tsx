@@ -14,6 +14,7 @@ import LandingPage from "../pages/LandingPage";
 import TravelPlaces from "../pages/travel-place/TravelPlaces";
 import TravelPlacePage from "../components/travel-place/TravelPlacePage";
 import CreateTravelPageFormComponent from "../components/travel-place/CreateTravelPlaceForm";
+import Wishlists from "../pages/wishlist/Wishlists";
 
 const router = createBrowserRouter([
     {
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
                     {
                         path: 'create-travel-place',
                         element: <CreateTravelPageFormComponent />
+                    },
+                    {
+                        path: 'wishlists',
+                        element: <Wishlists />
                     }
                 ]
             }

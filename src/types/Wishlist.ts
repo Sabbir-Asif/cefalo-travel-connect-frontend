@@ -1,3 +1,4 @@
+import type { UserResponse } from "./User";
 
 export type WishlistStatus = "PRIVATE" | "PUBLIC"
 export interface Wishlist {
@@ -23,7 +24,7 @@ export interface Wishlist {
 export interface WishlistWithUser {
   id: string;
   user_id: string;
-  user: string;
+  user: UserResponse;
   title: string;
   location_name: string;
   location_point: {

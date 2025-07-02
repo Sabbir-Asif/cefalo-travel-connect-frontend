@@ -20,7 +20,7 @@ const navItems = [
     icon: <FaMagnifyingGlassLocation className="text-2xl" />,
   },
   {
-    to: "/admin-dashboard",
+    to: "/wishlists",
     label: "Wishlists",
     icon: <FaRegBookmark className="text-2xl" />,
   },
