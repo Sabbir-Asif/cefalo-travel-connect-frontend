@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { MapLocationPicker } from './MapLocationPicker';
-import { MarkdownEditor } from './MarkdownEditor';
+import { MapLocationPicker } from '../location/MapLocationPicker';
+import { MarkdownEditor } from '../markdown/MarkdownEditor';
 import { TagInput } from './TagInput';
 import { getBlogById, updateBlogAPI } from '../../utils/api/blog';
 import type { Blog, BlogStatus } from '../../types/Blog';
@@ -10,9 +10,9 @@ import type { Transport } from '../../types/Transport';
 import type { Lodge } from '../../types/Lodge';
 import type { Food } from '../../types/Food';
 import type { BlogInsight } from '../../types/BlogInsight';
-import { LocationSearch } from './LocationSearch\'';
-import MarkdownRenderer from './MarkdownRenderer';
+import MarkdownRenderer from '../markdown/MarkdownRenderer';
 import type { UserResponse } from '../../types/User';
+import { LocationSearch } from '../location/LocationSearch\'';
 
 const BlogPage: React.FC = () => {
     const { blogId } = useParams<{ blogId: string }>();

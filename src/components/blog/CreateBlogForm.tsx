@@ -1,11 +1,11 @@
 import React, { useState, type FormEvent } from 'react';
-import { MapLocationPicker } from './MapLocationPicker';
-import { MarkdownEditor } from './MarkdownEditor';
+import { MapLocationPicker } from '../location/MapLocationPicker';
+import { MarkdownEditor } from '../markdown/MarkdownEditor';
 import { TagInput } from './TagInput';
 import type { Blog, CreateBlog } from '../../types/Blog';
 import { createBlogAPI } from '../../utils/api/blog';
-import { LocationSearch } from './LocationSearch\'';
 import { isAxiosError } from 'axios';
+import { LocationSearch } from '../location/LocationSearch\'';
 
 interface CreateBlogFormProps {
     onSuccess?: (blog: Blog) => void;
