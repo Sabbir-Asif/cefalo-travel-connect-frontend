@@ -155,7 +155,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
             {label && (
                 <label className="label">
                     <span className="label-text font-medium">
-                        {label}
+                        {label} <span className='text-red-400'>*</span>
                         {required && <span className="text-error ml-1">*</span>}
                     </span>
                 </label>

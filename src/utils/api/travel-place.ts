@@ -1,4 +1,4 @@
-import type { TravelPlaceType } from "../../types/TravelPlace";
+import type { CreateTravelPlace, TravelPlaceType } from "../../types/TravelPlace";
 import { api } from "../axios";
 
 export async function getAllTravelPlaceAPI(): Promise<TravelPlaceType[]> {
@@ -18,5 +18,10 @@ export async function getTravelPlaceByIdAPI(travelPlaceId: string): Promise<Trav
 
 export async function updateTravelPlaceAPI(travelPlaceId: string, updateData: Partial<TravelPlaceType>): Promise<TravelPlaceType> {
   const res = await api.put(`/travel-places/${travelPlaceId}`, updateData);
+  return res.data;
+}
+
+export async function createTravelPlaceAPI(data: CreateTravelPlace): Promise<TravelPlaceType> {
+  const res = await api.post('/travel-places', data);
   return res.data;
 }

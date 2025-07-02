@@ -13,6 +13,7 @@ import UserDashboard from "../pages/dashboard/UserDashboard";
 import LandingPage from "../pages/LandingPage";
 import TravelPlaces from "../pages/travel-place/TravelPlaces";
 import TravelPlacePage from "../components/travel-place/TravelPlacePage";
+import CreateTravelPageFormComponent from "../components/travel-place/CreateTravelPlaceForm";
 
 const router = createBrowserRouter([
     {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
                     {
                         path: 'travel-places/:travelPlaceId',
                         element: <TravelPlacePage />
+                    },
+                    {
+                        path: 'create-travel-place',
+                        element: <CreateTravelPageFormComponent />
                     }
                 ]
             }
