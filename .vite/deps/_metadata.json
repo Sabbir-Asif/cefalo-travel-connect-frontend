@@ -1,8 +1,133 @@
 {
-  "hash": "f3757c74",
+  "hash": "6770d695",
   "configHash": "60dc4a8b",
-  "lockfileHash": "2424e3a6",
-  "browserHash": "691f3ec4",
-  "optimized": {},
-  "chunks": {}
+  "lockfileHash": "b917614b",
+  "browserHash": "a7c1b4ba",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "649d1241",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "6b6ff6ec",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "2c5ba26c",
+      "needsInterop": true
+    },
+    "react-router": {
+      "src": "../../node_modules/react-router/dist/development/index.mjs",
+      "file": "react-router.js",
+      "fileHash": "8f3c9932",
+      "needsInterop": false
+    },
+    "react-icons/fa": {
+      "src": "../../node_modules/react-icons/fa/index.mjs",
+      "file": "react-icons_fa.js",
+      "fileHash": "1b26c8be",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "377ee3f3",
+      "needsInterop": false
+    },
+    "react-icons/io": {
+      "src": "../../node_modules/react-icons/io/index.mjs",
+      "file": "react-icons_io.js",
+      "fileHash": "632d76b0",
+      "needsInterop": false
+    },
+    "react-icons/fa6": {
+      "src": "../../node_modules/react-icons/fa6/index.mjs",
+      "file": "react-icons_fa6.js",
+      "fileHash": "7e86c9c2",
+      "needsInterop": false
+    },
+    "react-icons/ci": {
+      "src": "../../node_modules/react-icons/ci/index.mjs",
+      "file": "react-icons_ci.js",
+      "fileHash": "ef9242de",
+      "needsInterop": false
+    },
+    "react-icons/md": {
+      "src": "../../node_modules/react-icons/md/index.mjs",
+      "file": "react-icons_md.js",
+      "fileHash": "b6c2a533",
+      "needsInterop": false
+    },
+    "leaflet": {
+      "src": "../../node_modules/leaflet/dist/leaflet-src.js",
+      "file": "leaflet.js",
+      "fileHash": "a6efb538",
+      "needsInterop": true
+    },
+    "react-markdown": {
+      "src": "../../node_modules/react-markdown/index.js",
+      "file": "react-markdown.js",
+      "fileHash": "65e9e584",
+      "needsInterop": false
+    },
+    "remark-gfm": {
+      "src": "../../node_modules/remark-gfm/index.js",
+      "file": "remark-gfm.js",
+      "fileHash": "d03b561f",
+      "needsInterop": false
+    },
+    "rehype-sanitize": {
+      "src": "../../node_modules/rehype-sanitize/index.js",
+      "file": "rehype-sanitize.js",
+      "fileHash": "f40daeab",
+      "needsInterop": false
+    },
+    "@uiw/react-md-editor": {
+      "src": "../../node_modules/@uiw/react-md-editor/esm/index.js",
+      "file": "@uiw_react-md-editor.js",
+      "fileHash": "ed53328e",
+      "needsInterop": false
+    },
+    "react-leaflet": {
+      "src": "../../node_modules/react-leaflet/lib/index.js",
+      "file": "react-leaflet.js",
+      "fileHash": "6f3945e7",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-37LBJ62X": {
+      "file": "chunk-37LBJ62X.js"
+    },
+    "chunk-6TET3WRG": {
+      "file": "chunk-6TET3WRG.js"
+    },
+    "chunk-WPDR2CIW": {
+      "file": "chunk-WPDR2CIW.js"
+    },
+    "chunk-P3VMZLMX": {
+      "file": "chunk-P3VMZLMX.js"
+    },
+    "chunk-GKVACACG": {
+      "file": "chunk-GKVACACG.js"
+    },
+    "chunk-5HNGYYSW": {
+      "file": "chunk-5HNGYYSW.js"
+    },
+    "chunk-GQIAEJ4M": {
+      "file": "chunk-GQIAEJ4M.js"
+    },
+    "chunk-TVFQMRVC": {
+      "file": "chunk-TVFQMRVC.js"
+    },
+    "chunk-G3PMV62Z": {
+      "file": "chunk-G3PMV62Z.js"
+    }
+  }
 }
