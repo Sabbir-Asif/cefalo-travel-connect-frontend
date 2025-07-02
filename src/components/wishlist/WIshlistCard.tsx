@@ -1,5 +1,6 @@
 import React from 'react';
 import type { WishlistWithUser } from '../../types/Wishlist';
+import { useNavigate } from 'react-router';
 
 interface WishlistCardProp {
     wishlist: WishlistWithUser;
@@ -7,6 +8,11 @@ interface WishlistCardProp {
 
 const WIshlistCard: React.FC<WishlistCardProp> = ({ wishlist }) => {
     const travelDate = new Date(wishlist.travel_date).toLocaleDateString();
+    const navigate = useNavigate();
+
+    const handleNavigate = () => {
+        navigate(`/wishlists/${wishlist.id}`)
+    }
     return (
         <div className="card bg-gray-50 max-w-96 max-h-96 shadow-sm">
             <figure>
@@ -32,6 +38,12 @@ const WIshlistCard: React.FC<WishlistCardProp> = ({ wishlist }) => {
                     </div>
                 </div>
             </div>
+            <button 
+            className='btn bg-black font-nunito font-bold text-white'
+            onClick={handleNavigate}
+            >
+                View Details
+            </button>
         </div>
     );
 };

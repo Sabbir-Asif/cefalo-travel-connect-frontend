@@ -10,3 +10,14 @@ export async function getPublicWishlistAPI(): Promise<WishlistWithUser[]> {
   const res = await api.get('/wishlists/search?status=PUBLIC');
   return res.data;
 }
+
+export async function getWishlistByIdAPI(id: string): Promise<WishlistWithUser> {
+   console.log("wishlistId: " , id);
+  const res = await api.get(`/wishlists/${id}`)
+  return res.data;
+}
+
+export async function updateWishlistAPI(id: string, data: Partial<Wishlist>): Promise<WishlistWithUser> {
+  const res = await api.put(`/wishlists/${id}`, data);
+  return res.data;
+}
