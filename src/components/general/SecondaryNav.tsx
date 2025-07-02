@@ -1,15 +1,21 @@
 import { NavLink } from "react-router";
 import { IoIosBook } from "react-icons/io";
 import { FaMagnifyingGlassLocation, FaRegBookmark } from "react-icons/fa6";
+import { CiHome } from "react-icons/ci";
 
 const navItems = [
+  {
+    to: '/',
+    label: "Home",
+    icon: <CiHome className="text-2xl" />
+  },
   {
     to: "/blogs",
     label: "Blogs",
     icon: <IoIosBook className="text-2xl" />,
   },
   {
-    to: "/dashboard/user-id",
+    to: "/travel-places",
     label: "Travel Places",
     icon: <FaMagnifyingGlassLocation className="text-2xl" />,
   },

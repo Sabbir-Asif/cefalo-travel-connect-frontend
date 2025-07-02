@@ -5,12 +5,14 @@ import Signup from "../pages/auth/Signup";
 import UserProfile from "../pages/UserProfile";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import CreateBlogPage from "../pages/blog/CreateBlog";
-import Blogs from "../components/blog/Blogs";
+import Blogs from "../pages/blog/Blogs";
 import BlogPage from "../components/blog/BlogPage";
 import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import AdminRoute from "../components/auth/AdminRoute";
 import UserDashboard from "../pages/dashboard/UserDashboard";
 import LandingPage from "../pages/LandingPage";
+import TravelPlaces from "../pages/travel-place/TravelPlaces";
+import TravelPlacePage from "../components/travel-place/TravelPlacePage";
 
 const router = createBrowserRouter([
     {
@@ -60,6 +62,14 @@ const router = createBrowserRouter([
                                 element: <AdminDashboard />
                             }
                         ]
+                    },
+                    {
+                        path: 'travel-places',
+                        element: <TravelPlaces />
+                    },
+                    {
+                        path: 'travel-places/:travelPlaceId',
+                        element: <TravelPlacePage />
                     }
                 ]
             }

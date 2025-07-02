@@ -5,7 +5,7 @@ import { TagInput } from './TagInput';
 import type { Blog, CreateBlog } from '../../types/Blog';
 import { createBlogAPI } from '../../utils/api/blog';
 import { isAxiosError } from 'axios';
-import { LocationSearch } from '../location/LocationSearch\'';
+import { LocationSearch } from '../location/LocationSearch';
 
 interface CreateBlogFormProps {
     onSuccess?: (blog: Blog) => void;

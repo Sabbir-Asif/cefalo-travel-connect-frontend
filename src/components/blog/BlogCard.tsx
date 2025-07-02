@@ -21,7 +21,6 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
             <div className="card-body">
                 <h2 className="card-title">
                     {blog.title}
-                    {/* <div className="badge badge-secondary">NEW</div> */}
                 </h2>
                 <p>{blog.locationName}</p>
                 <div className="flex justify-between items-center">

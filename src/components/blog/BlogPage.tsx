@@ -12,7 +12,7 @@ import type { Food } from '../../types/Food';
 import type { BlogInsight } from '../../types/BlogInsight';
 import MarkdownRenderer from '../markdown/MarkdownRenderer';
 import type { UserResponse } from '../../types/User';
-import { LocationSearch } from '../location/LocationSearch\'';
+import { LocationSearch } from '../location/LocationSearch';
 
 const BlogPage: React.FC = () => {
     const { blogId } = useParams<{ blogId: string }>();

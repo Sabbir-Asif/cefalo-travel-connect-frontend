@@ -23,38 +23,6 @@ const Navbar: React.FC = () => {
                     {
                         isAuthenticated &&
                         <NavLink
-                            to="/"
-                            className={({ isActive }) =>
-                                `hover:bg-gray-300 p-2 font-nunito text-xl font-bold ${isActive
-                                    ? "border-b-1"
-                                    : ""
-                                }`
-                            }
-                        >
-                            Home
-                        </NavLink>
-                    }
-                </div>
-                <div className="">
-                    {
-                        isAuthenticated &&
-                        <NavLink
-                            to="/create-blog"
-                            className={({ isActive }) =>
-                                `hover:bg-gray-300 p-2 font-nunito text-xl font-bold ${isActive
-                                    ? "border-b-1"
-                                    : ""
-                                }`
-                            }
-                        >
-                            Create Blog
-                        </NavLink>
-                    }
-                </div>
-                <div className="">
-                    {
-                        isAuthenticated &&
-                        <NavLink
                             to={`/dashboard/${user?.id}`}
                             className={({ isActive }) =>
                                 `hover:bg-gray-300 p-2 font-nunito text-xl font-bold ${isActive
