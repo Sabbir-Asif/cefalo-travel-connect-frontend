@@ -9,13 +9,16 @@ import Blogs from "../pages/blog/Blogs";
 import BlogPage from "../components/blog/BlogPage";
 import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import AdminRoute from "../components/auth/AdminRoute";
-import UserDashboard from "../pages/dashboard/UserDashboard";
 import LandingPage from "../pages/LandingPage";
 import TravelPlaces from "../pages/travel-place/TravelPlaces";
 import TravelPlacePage from "../components/travel-place/TravelPlacePage";
 import CreateTravelPageFormComponent from "../components/travel-place/CreateTravelPlaceForm";
 import Wishlists from "../pages/wishlist/Wishlists";
 import WishlistPage from "../components/wishlist/WishlistPage";
+import DashboardLayout from "../pages/dashboard/DashboardLayout";
+import BlogList from "../components/dashboard/user-dashboard/BlogList";
+import TravelPlanList from "../components/dashboard/user-dashboard/TravelPlanList";
+import WishlistList from "../components/dashboard/user-dashboard/WishlistList";
 
 const router = createBrowserRouter([
     {
@@ -54,19 +57,6 @@ const router = createBrowserRouter([
                         element: <BlogPage />
                     },
                     {
-                        path: '/dashboard/:userId',
-                        element: <UserDashboard />
-                    },
-                    {
-                        element: <AdminRoute />,
-                        children: [
-                            {
-                                path: 'admin-dashboard',
-                                element: <AdminDashboard />
-                            }
-                        ]
-                    },
-                    {
                         path: 'travel-places',
                         element: <TravelPlaces />
                     },
@@ -88,6 +78,42 @@ const router = createBrowserRouter([
                     }
                 ]
             }
+        ]
+    },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: 'dashboard/:userId',
+                element: <DashboardLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <BlogList />
+                    },
+                    {
+                        path: 'blogs',
+                        element: <BlogList />
+                    },
+                    {
+                        path: 'travel-plans',
+                        element: <TravelPlanList />
+                    },
+                    {
+                        path: 'wishlists',
+                        element: <WishlistList />
+                    },
+                    {
+                        element: <AdminRoute />,
+                        children: [
+                            {
+                                path: 'admin',
+                                element: <AdminDashboard />
+                            }
+                        ]
+                    },
+                ]
+            },
         ]
     }
 ]);

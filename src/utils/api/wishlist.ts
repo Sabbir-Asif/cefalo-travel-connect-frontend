@@ -21,3 +21,8 @@ export async function updateWishlistAPI(id: string, data: Partial<Wishlist>): Pr
   const res = await api.put(`/wishlists/${id}`, data);
   return res.data;
 }
+
+export async function getWishlistByUserIdAPI(userId: string) : Promise<Wishlist[]> {
+  const res = await api.get(`/users/${userId}/wishlists`);
+  return res.data;
+}

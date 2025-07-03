@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
                     {
                         user?.role === 'ADMIN' &&
                         <NavLink
-                            to={`/admin-dashboard`}
+                            to={`/dashboard/${user.id}/admin`}
                             className={({ isActive }) =>
                                 `hover:bg-gray-300 p-2 font-nunito text-xl font-bold ${isActive
                                     ? "border-b-1"
