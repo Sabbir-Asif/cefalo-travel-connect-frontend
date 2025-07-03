@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 const PlanMap: React.FC<{ travelPlan: TravelPlan }> = ({ travelPlan }) => {
     const [loading, setLoading] = useState(true);
     const [endingPosition, setEndingPosition] = useState<[number, number]>([0, 0]);
-    const [startingPosition, setStartingPosition] = useState<[number, number]>([0, 0]);
+    // const [startingPosition, setStartingPosition] = useState<[number, number]>([0, 0]);
 
     useEffect(() => {
         if (
@@ -21,10 +21,10 @@ const PlanMap: React.FC<{ travelPlan: TravelPlan }> = ({ travelPlan }) => {
                 travelPlan.destination_location.long,
             ]);
 
-            setStartingPosition([
-                travelPlan.starting_point_location.lat,
-                travelPlan.starting_point_location.long,
-            ]);
+            // setStartingPosition([
+            //     travelPlan.starting_point_location.lat,
+            //     travelPlan.starting_point_location.long,
+            // ]);
 
             setLoading(false);
         }

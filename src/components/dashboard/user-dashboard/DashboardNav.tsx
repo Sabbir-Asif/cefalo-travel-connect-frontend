@@ -1,6 +1,8 @@
 import { NavLink } from "react-router";
 import { IoIosBook } from "react-icons/io";
 import { FaMagnifyingGlassLocation, FaRegBookmark } from "react-icons/fa6";
+import { FaUserFriends } from "react-icons/fa";
+
 import { useAuth } from "../../../context/useAuth";
 
 
@@ -23,6 +25,11 @@ const DashboardNav: React.FC = () => {
             label: "Wishlists",
             icon: <FaRegBookmark className="text-2xl" />,
         },
+        {
+            to: `/dashboard/${user?.id}/requests`,
+            label: "Travel Requests",
+            icon: <FaUserFriends className="text-2xl" />
+        }
     ];
 
     return (

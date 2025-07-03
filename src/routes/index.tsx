@@ -20,6 +20,10 @@ import BlogList from "../components/dashboard/user-dashboard/BlogList";
 import TravelPlanList from "../components/dashboard/user-dashboard/TravelPlanList";
 import WishlistList from "../components/dashboard/user-dashboard/WishlistList";
 import TravelPlanPage from "../components/travel-plan/TravelPlanPage";
+import ErrorPage from "../pages/ErrorPage";
+import RequestPage from "../components/travel-request/RequestPage";
+import SentRequest from "../components/travel-request/SentRequest";
+import RecievedRequest from "../components/travel-request/RecievedRequest";
 
 const router = createBrowserRouter([
     {
@@ -33,6 +37,7 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <Home />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 index: true,
@@ -76,7 +81,7 @@ const router = createBrowserRouter([
                     {
                         path: '/wishlists/:wishlistId',
                         element: <WishlistPage />
-                    }
+                    },
                 ]
             }
         ]
@@ -107,6 +112,24 @@ const router = createBrowserRouter([
                     {
                         path: 'travel-plans/:travelPlanId',
                         element: <TravelPlanPage />
+                    },
+                    {
+                        path: 'requests',
+                        element: <RequestPage />,
+                        children: [
+                            {
+                                index: true,
+                                element: <RecievedRequest />
+                            },
+                            {
+                                path: 'sent',
+                                element: <SentRequest />
+                            },
+                            {
+                                path: 'recieved',
+                                element: <RecievedRequest />
+                            }
+                        ]
                     },
                     {
                         element: <AdminRoute />,
