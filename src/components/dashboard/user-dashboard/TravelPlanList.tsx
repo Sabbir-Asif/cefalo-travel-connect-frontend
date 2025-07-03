@@ -3,12 +3,10 @@ import { useAuth } from '../../../context/useAuth';
 import { getTravelPlansByPlannerId } from '../../../utils/api/travel-plan';
 import type { TravelPlan } from '../../../types/TravelPlan';
 import TravelPlanCard from '../../travel-plan/TravelPlanCard';
-import { useNavigate } from 'react-router';
 
 const TravelPlanList: React.FC = () => {
     const { user } = useAuth();
     const [plans, setPlans] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (!user?.id) return;
@@ -35,7 +33,6 @@ const TravelPlanList: React.FC = () => {
                     <TravelPlanCard
                         key={plan.id}
                         travelPlan={plan}
-                        onViewDetails={() => navigate(`/travel-plans/${plan.id}`)}
                     />
                 ))}
             </div>

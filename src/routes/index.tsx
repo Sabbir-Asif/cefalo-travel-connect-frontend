@@ -19,6 +19,7 @@ import DashboardLayout from "../pages/dashboard/DashboardLayout";
 import BlogList from "../components/dashboard/user-dashboard/BlogList";
 import TravelPlanList from "../components/dashboard/user-dashboard/TravelPlanList";
 import WishlistList from "../components/dashboard/user-dashboard/WishlistList";
+import TravelPlanPage from "../components/travel-plan/TravelPlanPage";
 
 const router = createBrowserRouter([
     {
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
                     {
                         path: 'wishlists',
                         element: <WishlistList />
+                    },
+                    {
+                        path: 'travel-plans/:travelPlanId',
+                        element: <TravelPlanPage />
                     },
                     {
                         element: <AdminRoute />,

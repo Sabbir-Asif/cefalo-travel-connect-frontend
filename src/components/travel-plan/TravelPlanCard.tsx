@@ -1,6 +1,13 @@
+import { useNavigate } from "react-router";
 import type { TravelPlan } from "../../types/TravelPlan";
+import { useAuth } from "../../context/useAuth";
 
-const TravelPlanCard = ({ travelPlan, onViewDetails }: { travelPlan: TravelPlan; onViewDetails: () => void }) => {
+const TravelPlanCard = ({ travelPlan }: { travelPlan: TravelPlan }) => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const onViewDetails = () => {
+    navigate(`/dashboard/${user?.id}/travel-plans/${travelPlan.id}`)
+  }
   return (
     <div className="card bg-base-100 shadow-md">
       <div className="card-body">
