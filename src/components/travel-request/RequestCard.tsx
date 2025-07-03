@@ -7,7 +7,7 @@ const RequestCard: React.FC<{ request: TravelRequestWithUsers, type: string }> =
     const [open, setOpen] = useState(false);
 
     return (
-        <div>
+        <div className="my-2">
             <div
                 onClick={() => setOpen(true)}
                 className="cursor-pointer border rounded-lg p-4 shadow hover:shadow-md transition duration-200 bg-white"
