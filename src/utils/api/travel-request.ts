@@ -1,4 +1,4 @@
-import type { TravelRequest, TravelRequestWithUsers } from "../../types/TravelRequest";
+import type { CreateTravelRequest, TravelRequest, TravelRequestWithUsers } from "../../types/TravelRequest";
 import { api } from "../axios";
 
 export async function getSentRequestFromUserAPI(userId: string): Promise<TravelRequestWithUsers[]> {
@@ -13,5 +13,10 @@ export async function getRecievedRequestByUserAPI(userId: string): Promise<Trave
 
 export async function updateTravelrequestAPI(id: string, data: Partial<TravelRequest>) {
     const res = await api.put(`/travel-requests/${id}`, data);
+    return res.data;
+}
+
+export async function createTravelRequestAPI(data: CreateTravelRequest): Promise<TravelRequest> {
+    const res = await api.post('/travel-requests', data);
     return res.data;
 }

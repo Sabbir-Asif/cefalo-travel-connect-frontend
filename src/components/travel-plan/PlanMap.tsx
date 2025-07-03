@@ -47,7 +47,6 @@ const PlanMap: React.FC<{ travelPlan: TravelPlan }> = ({ travelPlan }) => {
 
     return (
         <div className='font-nunito'>
-            <h2 className='font-bold mb-2'>View in map</h2>
             <MapContainer
                 center={endingPosition}
                 zoom={10}
@@ -71,6 +70,7 @@ const PlanMap: React.FC<{ travelPlan: TravelPlan }> = ({ travelPlan }) => {
                     <Tooltip>{travelPlan.destination_name}</Tooltip>
                 </Marker>
             </MapContainer>
+            <h2 className='font-bold'>View in map</h2>
         </div>
     );
 };

@@ -22,3 +22,8 @@ export async function updateUserRole(
 export async function deleteUser(id: string): Promise<void> {
   await api.delete(`/users/${id}`);
 }
+
+export async function getUserByEmailAPI(email: string): Promise<UserResponse[]> {
+  const res = await api.get(`/users/search?email=${email}`)
+  return res.data;
+}
