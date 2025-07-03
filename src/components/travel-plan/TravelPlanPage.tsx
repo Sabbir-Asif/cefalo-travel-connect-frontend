@@ -5,6 +5,7 @@ import { getTravelPlanByIdAPI } from "../../utils/api/travel-plan";
 import PlanDetails from "./PlanDetails";
 import PlanMap from "./PlanMap";
 import MemberList from "./member/MemberList";
+import TransportList from "./TransportList";
 
 type TabOption = "members" | "transports" | "accommodations" | "foods";
 
@@ -76,7 +77,7 @@ const TravelPlanPage: React.FC = () => {
 
                 <div className="mt-4">
                     {activeTab === "members" && <MemberList />}
-                    {activeTab === "transports" && <div>Transport section coming soon...</div>}
+                    {activeTab === "transports" && <TransportList />}
                     {activeTab === "accommodations" && <div>Accommodation section coming soon...</div>}
                     {activeTab === "foods" && <div>Food section coming soon...</div>}
                 </div>
