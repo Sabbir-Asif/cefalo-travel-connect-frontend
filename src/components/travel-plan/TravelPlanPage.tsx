@@ -5,7 +5,9 @@ import { getTravelPlanByIdAPI } from "../../utils/api/travel-plan";
 import PlanDetails from "./PlanDetails";
 import PlanMap from "./PlanMap";
 import MemberList from "./member/MemberList";
-import TransportList from "./TransportList";
+import TransportList from "./transport/TransportList";
+import AccomodationList from "./Accomodation/AccomodationList";
+import GroupDiscussion from "./discussion/GroupDiscussion";
 
 type TabOption = "members" | "transports" | "accommodations" | "foods";
 
@@ -31,16 +33,22 @@ const TravelPlanPage: React.FC = () => {
     if (!travelPlan?.id) return <div>No travel plan found by this ID</div>;
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between gap-8">
-                <PlanMap
-                    key={travelPlan.id}
-                    travelPlan={travelPlan}
-                />
-                <PlanDetails
-                    key={travelPlan.id + new Date()}
-                    travelPlan={travelPlan}
-                />
+        <div className="space-y-6 relative">
+            <div className="fixed bottom-4 right-6 z-50">
+                <GroupDiscussion />
+            </div>
+            
+            <div className="grid grid-cols-3 gap-8">
+                <div className="flex justify-start gap-8 col-span-2">
+                    <PlanMap
+                        key={travelPlan.id}
+                        travelPlan={travelPlan}
+                    />
+                    <PlanDetails
+                        key={travelPlan.id + new Date()}
+                        travelPlan={travelPlan}
+                    />
+                </div>
             </div>
 
             <div className="mt-6">
@@ -66,20 +74,12 @@ const TravelPlanPage: React.FC = () => {
                     >
                         Accommodations
                     </button>
-                    <button
-                        role="tab"
-                        className={`tab ${activeTab === "foods" ? "tab-active" : ""}`}
-                        onClick={() => setActiveTab("foods")}
-                    >
-                        Foods
-                    </button>
                 </div>
 
                 <div className="mt-4">
                     {activeTab === "members" && <MemberList />}
                     {activeTab === "transports" && <TransportList />}
-                    {activeTab === "accommodations" && <div>Accommodation section coming soon...</div>}
-                    {activeTab === "foods" && <div>Food section coming soon...</div>}
+                    {activeTab === "accommodations" && <AccomodationList />}
                 </div>
             </div>
         </div>

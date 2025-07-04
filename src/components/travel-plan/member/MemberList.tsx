@@ -34,7 +34,6 @@ const MemberList: React.FC = () => {
 
     return (
         <div>
-            <h2 className="text-xl font-bold mb-2">Members</h2>
             <button className="btn btn-primary mb-2" onClick={handleAdd}>Add Member</button>
 
             <div className="space-y-2">

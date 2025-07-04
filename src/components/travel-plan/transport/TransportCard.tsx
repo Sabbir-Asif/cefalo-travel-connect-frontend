@@ -1,4 +1,4 @@
-import { type TourTransportWithTransport } from "../../types/TourTransport";
+import { type TourTransportWithTransport } from "../../../types/TourTransport";
 
 interface TransportCardProps {
   transport: TourTransportWithTransport;
@@ -34,7 +34,7 @@ const TransportCard: React.FC<TransportCardProps> = ({ transport }) => {
   console.log(transport)
 
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
+    <div className="card w-96 bg-basegray-50 shadow-xl font-nunito">
       <div className="card-body">
         <div className="flex justify-between items-start mb-4">
           <h2 className="card-title text-xl font-bold">{transport.transport?.name}</h2>
@@ -67,7 +67,7 @@ const TransportCard: React.FC<TransportCardProps> = ({ transport }) => {
           <div className="divider"></div>
           <div className="flex justify-between items-center">
             <span className="text-base-content/70">Fare</span>
-            <span className="text-xl font-bold text-primary">৳{transport.transport.fare}</span>
+            <span className="text-lg font-bold text-primary">{transport.transport.fare}</span>
           </div>
         </div>
       </div>

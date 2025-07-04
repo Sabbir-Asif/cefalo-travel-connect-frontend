@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { gettransportsForTravelPlanAPI } from "../../utils/api/transport";
+import { gettransportsForTravelPlanAPI } from "../../../utils/api/transport";
 import TransportCard from "./TransportCard";
-import type { TourTransportWithTransport } from "../../types/TourTransport";
+import type { TourTransportWithTransport } from "../../../types/TourTransport";
 
 const TransportList: React.FC = () => {
     const { travelPlanId } = useParams();
@@ -29,8 +29,7 @@ const TransportList: React.FC = () => {
 
     return (
         <div>
-            <h2>transports</h2>
-            <div>
+            <div className="grid grid-cols-2 gap-2">
                 {
                     transports.map(transport => (
                         <TransportCard 
