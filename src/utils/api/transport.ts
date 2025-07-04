@@ -16,3 +16,8 @@ export async function getAllDesticationPointsAPI(): Promise<TransportLocation[]>
     const res = await api.get(`transports/destinationLocationNames`);
     return res.data;
 }
+
+export async function searchTransportAPI(start: string, dest: string, type: string) {
+    const res = await api.get(`/transports/search?startingLocationName=${start}&destinationLocationName=${dest}&type=${type}&sortBy=fare&order=asc`)
+    return res.data;
+}
