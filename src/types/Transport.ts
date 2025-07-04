@@ -20,3 +20,12 @@ export interface Transport {
     created_at: Date;
     updated_at: Date;
 }
+
+
+export interface TransportLocation {
+    name: string,
+    location_point: {
+        lat: number;
+        long: number;
+    };
+}
