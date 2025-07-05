@@ -26,10 +26,19 @@ const MemberList: React.FC = () => {
         fetchData();
     }, [travelPlanId]);
 
+    const handleDelete = (deletedId: string) => {
+        setMembers((prev) => prev.filter((m) => m.id !== deletedId));
+    };
+
     if (loading) return <div>Loading...</div>;
 
     if (!loading && members.length === 0) {
-        return <div>No members found!</div>;
+        return (
+            <div>
+                No members found!
+                <button className="btn btn-primary mt-2" onClick={handleAdd}>Add Member</button>
+            </div>
+        );
     }
 
     return (
@@ -37,8 +46,13 @@ const MemberList: React.FC = () => {
             <button className="btn btn-primary mb-2" onClick={handleAdd}>Add Member</button>
 
             <div className="space-y-2">
-                {members.map(user => (
-                    <MemberCard key={user.id} user={user} />
+                {members.map((user) => (
+                    <MemberCard
+                        key={user.id}
+                        travelPlanId={travelPlanId!}
+                        member={user}
+                        onDelete={handleDelete}
+                    />
                 ))}
             </div>
 

@@ -49,3 +49,8 @@ export async function removeAccomodationFromTravelPlan(travelPlanId: string, acc
   const res = await api.delete(`/travel-plans/${travelPlanId}/lodges/${accomodationId}`);
   return res.status;
 }
+
+export async function removeMemberFromTravelPlan(travelPlanId: string, userId: string): Promise<number> {
+  const res = await api.delete(`/travel-plans/${travelPlanId}/members/${userId}`);
+  return res.status;
+}
