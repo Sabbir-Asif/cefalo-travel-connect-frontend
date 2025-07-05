@@ -39,3 +39,13 @@ export async function addLodgeToTravelPlanAPI(data: TourLodge): Promise<TourLodg
   const res = await api.post(`/travel-plans/lodges`, data);
   return res.data;
 }
+
+export async function removeTransportFromTravelPlanAPI(id: string): Promise<number> {
+  const res = await api.delete(`/travel-plans/transports/${id}`);
+  return res.status;
+}
+
+export async function removeAccomodationFromTravelPlan(travelPlanId: string, accomodationId: string): Promise<number> {
+  const res = await api.delete(`/travel-plans/${travelPlanId}/lodges/${accomodationId}`);
+  return res.status;
+}

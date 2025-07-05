@@ -6,54 +6,65 @@ import CreateTransportModal from "./CreateTransportModal";
 import type { TourTransportWithTransport } from "../../../types/TourTransport";
 
 const TransportList: React.FC = () => {
-    const { travelPlanId } = useParams();
-    const [transports, setTransports] = useState<TourTransportWithTransport[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
+  const { travelPlanId } = useParams();
+  const [transports, setTransports] = useState<TourTransportWithTransport[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-    useEffect(() => {
-        if (!travelPlanId) return;
+  useEffect(() => {
+    if (!travelPlanId) return;
 
-        const fetchData = async () => {
-            setLoading(true);
-            const data = await gettransportsForTravelPlanAPI(travelPlanId);
-            setTransports(data);
-            setLoading(false);
-        };
-
-        fetchData();
-    }, [travelPlanId]);
-
-    const handleCreate = (newTransport: TourTransportWithTransport) => {
-        setTransports((prev) => [...prev, newTransport]);
+    const fetchData = async () => {
+      setLoading(true);
+      const data = await gettransportsForTravelPlanAPI(travelPlanId);
+      setTransports(data);
+      setLoading(false);
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (!loading && transports.length === 0) return <div>No Transport found!</div>;
+    fetchData();
+  }, [travelPlanId]);
 
-    return (
-        <div>
-            <div className="flex justify-start mb-4">
-                <button className="btn btn-primary" onClick={() => setModalOpen(true)}>
-                    + Add Transport
-                </button>
-            </div>
+  const handleCreate = (newTransport: TourTransportWithTransport) => {
+    setTransports((prev) => [...prev, newTransport]);
+  };
 
-            <div className="grid grid-cols-2 gap-2">
-                {transports.map((transport) => (
-                    <TransportCard key={transport.id} transport={transport} />
-                ))}
-            </div>
+  const handleDelete = (deletedId: string) => {
+    setTransports((prev) => prev.filter((t) => t.id !== deletedId));
+  };
 
-            {modalOpen && travelPlanId && (
-                <CreateTransportModal
-                    travelPlanId={travelPlanId}
-                    onClose={() => setModalOpen(false)}
-                    onCreate={handleCreate}
-                />
-            )}
+  return (
+    <div>
+      <div className="flex justify-start mb-4">
+        <button className="btn btn-primary" onClick={() => setModalOpen(true)}>
+          + Add Transport
+        </button>
+      </div>
+
+      {loading ? (
+        <div>Loading...</div>
+      ) : transports.length === 0 ? (
+        <div>No Transport found!</div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2">
+          {transports.map((transport) => (
+            <TransportCard
+              key={transport.id}
+              transport={transport}
+              onDelete={handleDelete}
+            />
+          ))}
         </div>
-    );
+      )}
+
+      {modalOpen && travelPlanId && (
+        <CreateTransportModal
+          travelPlanId={travelPlanId}
+          onClose={() => setModalOpen(false)}
+          onCreate={handleCreate}
+        />
+      )}
+    </div>
+  );
 };
 
 export default TransportList;

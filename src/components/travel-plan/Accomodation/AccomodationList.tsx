@@ -28,26 +28,12 @@ const AccomodationList: React.FC = () => {
         setAccomodations(prev => [...prev, newLodge]);
     };
 
+    const handleDelete = (deletedId: string) => {
+        setAccomodations(prev => prev.filter(a => a.id !== deletedId));
+    };
+
     if (loading) {
         return <div>Loading...</div>;
-    }
-
-    if (accomodations.length === 0) {
-        return (
-            <div>
-                <button className="btn btn-primary mb-4" onClick={() => setShowModal(true)}>
-                    + Add Accommodation
-                </button>
-                No Accommodation for this plan.
-                {showModal && travelPlanId && (
-                    <CreateAccomodationModal
-                        travelPlanId={travelPlanId}
-                        onClose={() => setShowModal(false)}
-                        onAdd={handleAddLodge}
-                    />
-                )}
-            </div>
-        );
     }
 
     return (
@@ -57,11 +43,23 @@ const AccomodationList: React.FC = () => {
                     + Add Accommodation
                 </button>
             </div>
-            <div className="space-y-2 grid grid-cols-2 gap-2">
-                {accomodations.map((accomodation) => (
-                    <AccomodationCard key={accomodation.id} accomodation={accomodation} />
-                ))}
-            </div>
+
+            {accomodations.length === 0 ? (
+                <div>
+                    No Accommodation for this plan.
+                </div>
+            ) : (
+                <div className="space-y-2 grid grid-cols-2 gap-2">
+                    {accomodations.map((accomodation) => (
+                        <AccomodationCard 
+                            key={accomodation.id}
+                            travelPlanId={travelPlanId!}
+                            accomodation={accomodation}
+                            onDelete={handleDelete}
+                        />
+                    ))}
+                </div>
+            )}
 
             {showModal && travelPlanId && (
                 <CreateAccomodationModal
