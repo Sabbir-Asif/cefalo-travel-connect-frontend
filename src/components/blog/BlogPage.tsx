@@ -13,6 +13,10 @@ import type { BlogInsight } from '../../types/BlogInsight';
 import MarkdownRenderer from '../markdown/MarkdownRenderer';
 import type { UserResponse } from '../../types/User';
 import { LocationSearch } from '../location/LocationSearch';
+import TransportList from './transports/TransportList';
+import AccomodationList from './lodges/AccomodationList';
+
+type TabOption = "transports" | "accommodations" | "foods" | "insights";
 
 const BlogPage: React.FC = () => {
     const { blogId } = useParams<{ blogId: string }>();
@@ -63,6 +67,7 @@ const BlogPage: React.FC = () => {
 
     const [isMapOpen, setIsMapOpen] = useState(false);
     const [updating, setUpdating] = useState(false);
+    const [activeTab, setActiveTab] = useState<TabOption>("accommodations");
 
     useEffect(() => {
         const loadBlogData = async () => {
@@ -531,6 +536,45 @@ const BlogPage: React.FC = () => {
                 onClose={() => setIsMapOpen(false)}
                 onLocationSelect={handleLocationSelect}
             />
+            <section className='min-h-screen'>
+                <div className="mt-6">
+                    <div role="tablist" className="tabs tabs-boxed font-bold font-nunito">
+                        <button
+                            role="tab"
+                            className={`tab ${activeTab === "transports" ? "tab-active" : ""}`}
+                            onClick={() => setActiveTab("transports")}
+                        >
+                            Transports
+                        </button>
+                        <button
+                            role="tab"
+                            className={`tab ${activeTab === "accommodations" ? "tab-active" : ""}`}
+                            onClick={() => setActiveTab("accommodations")}
+                        >
+                            Accommodations
+                        </button>
+                        <button
+                            role="tab"
+                            className={`tab ${activeTab === "foods" ? "tab-active" : ""}`}
+                            onClick={() => setActiveTab("foods")}
+                        >
+                            Foods
+                        </button>
+                        <button
+                            role="tab"
+                            className={`tab ${activeTab === "insights" ? "tab-active" : ""}`}
+                            onClick={() => setActiveTab("insights")}
+                        >
+                            Amenities
+                        </button>
+                    </div>
+
+                    <div className="mt-4">
+                        {activeTab === "transports" && <TransportList />}
+                        {activeTab === "accommodations" && <AccomodationList />}
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };
