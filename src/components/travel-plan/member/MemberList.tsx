@@ -18,43 +18,45 @@ const MemberList: React.FC = () => {
 
         const fetchData = async () => {
             setLoading(true);
-            const data = await getMembersForTravelPlanAPI(travelPlanId);
-            setMembers(data);
-            setLoading(false);
+            try {
+                const data = await getMembersForTravelPlanAPI(travelPlanId);
+                setMembers(data);
+            } catch (error) {
+                console.error("Failed to fetch members:", error);
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchData();
     }, [travelPlanId]);
 
     const handleDelete = (deletedId: string) => {
-        setMembers((prev) => prev.filter((m) => m.id !== deletedId));
+        setMembers(prev => prev.filter(member => member.id !== deletedId));
     };
-
-    if (loading) return <div>Loading...</div>;
-
-    if (!loading && members.length === 0) {
-        return (
-            <div>
-                No members found!
-                <button className="btn btn-primary mt-2" onClick={handleAdd}>Add Member</button>
-            </div>
-        );
-    }
 
     return (
         <div>
             <button className="btn btn-primary mb-2" onClick={handleAdd}>Add Member</button>
 
-            <div className="space-y-2">
-                {members.map((user) => (
-                    <MemberCard
-                        key={user.id}
-                        travelPlanId={travelPlanId!}
-                        member={user}
-                        onDelete={handleDelete}
-                    />
-                ))}
-            </div>
+            {loading ? (
+                <div>Loading...</div>
+            ) : members.length === 0 ? (
+                <div className="text-base-content/70 mb-2">
+                    No members found!
+                </div>
+            ) : (
+                <div className="space-y-2">
+                    {members.map(user => (
+                        <MemberCard
+                            key={user.id}
+                            travelPlanId={travelPlanId!}
+                            member={user}
+                            onDelete={handleDelete}
+                        />
+                    ))}
+                </div>
+            )}
 
             {modalOpen && (
                 <CreateTravelRequestModal

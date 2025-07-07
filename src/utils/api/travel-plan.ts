@@ -16,8 +16,13 @@ export async function getTravelPlansByPlannerId(plannerId: string) {
 }
 
 export async function getTravelPlanByIdAPI(id: string): Promise<TravelPlan> {
-  const res = await api.get(`travel-plans/${id}`);
+  const res = await api.get(`/travel-plans/${id}`);
   return res.data;
+}
+
+export async function deleteTravelPlan(id: string): Promise<number> {
+  const res = await api.delete(`/travel-plans/${id}`);
+  return res.status;
 }
 
 export async function createTourMemberAPI(data: { user_id: string, travelplan_id: string }): Promise<{ user_id: string, travelplan_id: string }> {
@@ -62,5 +67,10 @@ export async function removeMemberFromTravelPlan(travelPlanId: string, userId: s
 
 export async function SuggestedMembersAPI(userId: string): Promise<UserResponse[]> {
   const res = await api.get(`/wishlists/matchmaking?userId=${userId}&radius=20&timeDiff=1m`);
+  return res.data;
+}
+
+export async function getInvitedTravelPlansAPI(userId: string): Promise<TravelPlan[]> {
+  const res = await api.get(`/users/${userId}/travel-plans`);
   return res.data;
 }

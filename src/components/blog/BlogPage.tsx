@@ -15,7 +15,6 @@ import type { UserResponse } from '../../types/User';
 import { LocationSearch } from '../location/LocationSearch';
 import TransportList from './transports/TransportList';
 import AccomodationList from './lodges/AccomodationList';
-import FoodList from './foods/FoodList';
 
 type TabOption = "transports" | "accommodations" | "foods" | "insights";
 
@@ -554,7 +553,7 @@ const BlogPage: React.FC = () => {
                         >
                             Accommodations
                         </button>
-                        <button
+                        {/* <button
                             role="tab"
                             className={`tab ${activeTab === "foods" ? "tab-active" : ""}`}
                             onClick={() => setActiveTab("foods")}
@@ -567,13 +566,13 @@ const BlogPage: React.FC = () => {
                             onClick={() => setActiveTab("insights")}
                         >
                             Amenities
-                        </button>
+                        </button> */}
                     </div>
 
                     <div className="mt-4">
                         {activeTab === "transports" && <TransportList />}
                         {activeTab === "accommodations" && <AccomodationList />}
-                        {activeTab === "foods" && <FoodList />}
+                        {/* {activeTab === "foods" && <FoodList />} */}
                     </div>
                 </div>
             </section>

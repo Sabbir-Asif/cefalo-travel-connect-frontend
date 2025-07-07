@@ -29,11 +29,10 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<LocationSuggestion | null>(null);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
-    const [showConfirmModal, setShowConfirmModal] = useState(false); // Use state instead of DOM modal
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Update query when value prop changes
     useEffect(() => {
         setQuery(value);
     }, [value]);
@@ -114,17 +113,16 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
     };
 
     const handleSuggestionSelect = (suggestion: LocationSuggestion) => {
-        console.log('Suggestion selected:', suggestion); // Debug log
         setSelectedLocation(suggestion);
         setQuery(suggestion.display_name);
         setShowSuggestions(false);
         setHighlightedIndex(-1);
-        setShowConfirmModal(true); // Use state instead of DOM modal
+        setShowConfirmModal(true);
     };
 
     const handleConfirmLocation = () => {
         if (selectedLocation) {
-            console.log('Confirming location:', selectedLocation); // Debug log
+            console.log('Confirming location:', selectedLocation);
             onLocationSelect({
                 name: selectedLocation.display_name,
                 lat: parseFloat(selectedLocation.lat),
@@ -279,7 +277,6 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
                 </label>
             )}
             
-            {/* Use conditional rendering instead of DOM modal */}
             {showConfirmModal && (
                 <div className="modal modal-open">
                     <div className="modal-box">
