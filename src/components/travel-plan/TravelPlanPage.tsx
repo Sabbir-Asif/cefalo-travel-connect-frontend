@@ -10,6 +10,7 @@ import AccomodationList from "./Accomodation/AccomodationList";
 import GroupDiscussion from "./discussion/GroupDiscussion";
 import SuggestedMemberList from "./suggestions/SuggestedMemberList";
 import SuggestedTransportList from "./suggestions/SuggestedTransportList";
+import SuggestedAccomodationList from "./suggestions/SuggestedAccomodationList";
 
 type TabOption = "members" | "transports" | "accommodations" | "foods";
 
@@ -42,7 +43,7 @@ const TravelPlanPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-5 gap-8">
-                <div className="flex justify-start gap-8 col-span-3 border-r-2">
+                <div className="flex justify-start gap-8 col-span-3 border-r-">
                     <PlanMap
                         key={travelPlan.id}
                         travelPlan={travelPlan}
@@ -84,7 +85,10 @@ const TravelPlanPage: React.FC = () => {
                             key={travelPlan.id}
                             travelPlan={travelPlan}
                         />}
-                        {suggestionsTab === "accommodations" && <AccomodationList />}
+                        {suggestionsTab === "accommodations" && <SuggestedAccomodationList
+                            key={travelPlan.id}
+                            travelPlan={travelPlan}
+                        />}
                     </div>
                 </div>
             </div>
