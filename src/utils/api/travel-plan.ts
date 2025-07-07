@@ -54,3 +54,8 @@ export async function removeMemberFromTravelPlan(travelPlanId: string, userId: s
   const res = await api.delete(`/travel-plans/${travelPlanId}/members/${userId}`);
   return res.status;
 }
+
+export async function SuggestedMembersAPI(userId: string): Promise<UserResponse[]> {
+  const res = await api.get(`/wishlists/matchmaking?userId=${userId}&radius=20&timeDiff=1m`);
+  return res.data;
+}

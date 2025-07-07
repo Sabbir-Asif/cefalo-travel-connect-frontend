@@ -8,6 +8,7 @@ import MemberList from "./member/MemberList";
 import TransportList from "./transport/TransportList";
 import AccomodationList from "./Accomodation/AccomodationList";
 import GroupDiscussion from "./discussion/GroupDiscussion";
+import SuggestedMemberList from "./suggestions/SuggestedMemberList";
 
 type TabOption = "members" | "transports" | "accommodations" | "foods";
 
@@ -16,6 +17,7 @@ const TravelPlanPage: React.FC = () => {
     const [travelPlan, setTravelPlan] = useState<TravelPlan>({} as TravelPlan);
     const [isLoading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<TabOption>("members");
+    const [suggestionsTab, setSuggestionsTab] = useState<TabOption>("members");
 
     useEffect(() => {
         if (!travelPlanId) return;
@@ -37,7 +39,7 @@ const TravelPlanPage: React.FC = () => {
             <div className="fixed bottom-4 right-6 z-50">
                 <GroupDiscussion />
             </div>
-            
+
             <div className="grid grid-cols-3 gap-8">
                 <div className="flex justify-start gap-8 col-span-2">
                     <PlanMap
@@ -48,6 +50,38 @@ const TravelPlanPage: React.FC = () => {
                         key={travelPlan.id + new Date()}
                         travelPlan={travelPlan}
                     />
+                </div>
+                <div className="border-l pl-4">
+                    <h2 className="text-xl fonr-nunito font-bold text-center">Suggestions</h2>
+                    <div role="tablist" className="tabs tabs-boxed font-bold font-nunito">
+                        <button
+                            role="tab"
+                            className={`tab ${suggestionsTab === "members" ? "tab-active" : ""}`}
+                            onClick={() => setSuggestionsTab("members")}
+                        >
+                            Members
+                        </button>
+                        <button
+                            role="tab"
+                            className={`tab ${suggestionsTab === "transports" ? "tab-active" : ""}`}
+                            onClick={() => setSuggestionsTab("transports")}
+                        >
+                            Transports
+                        </button>
+                        <button
+                            role="tab"
+                            className={`tab ${suggestionsTab === "accommodations" ? "tab-active" : ""}`}
+                            onClick={() => setSuggestionsTab("accommodations")}
+                        >
+                            Accommodations
+                        </button>
+                    </div>
+
+                    <div className="mt-4">
+                        {suggestionsTab === "members" && <SuggestedMemberList />}
+                        {suggestionsTab === "transports" && <TransportList />}
+                        {suggestionsTab === "accommodations" && <AccomodationList />}
+                    </div>
                 </div>
             </div>
 
