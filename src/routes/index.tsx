@@ -25,6 +25,7 @@ import RequestPage from "../components/travel-request/RequestPage";
 import SentRequest from "../components/travel-request/SentRequest";
 import RecievedRequest from "../components/travel-request/RecievedRequest";
 import CreateTravelPlanModal from "../components/travel-plan/CreateTravelPlanModal";
+import JourneyPage from "../components/travel-plan/JourneyPage";
 
 const router = createBrowserRouter([
     {
@@ -146,6 +147,10 @@ const router = createBrowserRouter([
                         ]
                     },
                 ]
+            },
+            {
+                path: 'travel-plans/:travelPlanId/journey',
+                element: <JourneyPage />
             },
         ]
     }

@@ -1,10 +1,12 @@
 import React from 'react';
 import type { TravelPlan } from '../../types/TravelPlan';
 import { FaLocationDot } from "react-icons/fa6";
+import { useNavigate } from 'react-router';
 
 const PlanDetails: React.FC<{ travelPlan: TravelPlan }> = ({ travelPlan }) => {
     const startingDate = new Date(travelPlan.starting_date).toLocaleDateString();
     const endingDate = new Date(travelPlan.ending_date).toLocaleDateString();
+    const navigate = useNavigate();
 
     return (
         <div className="font-nunito">
@@ -32,6 +34,12 @@ const PlanDetails: React.FC<{ travelPlan: TravelPlan }> = ({ travelPlan }) => {
                     {travelPlan.budget} taka
                 </span>
             </p>
+            <button
+                className="btn btn-accent mt-4"
+                onClick={() => navigate(`/travel-plans/${travelPlan.id}/journey`)}
+            >
+                Start Live Journey
+            </button>
         </div>
     );
 };
