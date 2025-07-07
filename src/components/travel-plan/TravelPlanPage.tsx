@@ -9,6 +9,7 @@ import TransportList from "./transport/TransportList";
 import AccomodationList from "./Accomodation/AccomodationList";
 import GroupDiscussion from "./discussion/GroupDiscussion";
 import SuggestedMemberList from "./suggestions/SuggestedMemberList";
+import SuggestedTransportList from "./suggestions/SuggestedTransportList";
 
 type TabOption = "members" | "transports" | "accommodations" | "foods";
 
@@ -40,8 +41,8 @@ const TravelPlanPage: React.FC = () => {
                 <GroupDiscussion />
             </div>
 
-            <div className="grid grid-cols-3 gap-8">
-                <div className="flex justify-start gap-8 col-span-2">
+            <div className="grid grid-cols-5 gap-8">
+                <div className="flex justify-start gap-8 col-span-3 border-r-2">
                     <PlanMap
                         key={travelPlan.id}
                         travelPlan={travelPlan}
@@ -51,7 +52,7 @@ const TravelPlanPage: React.FC = () => {
                         travelPlan={travelPlan}
                     />
                 </div>
-                <div className="border-l pl-4">
+                <div className="col-span-2">
                     <h2 className="text-xl fonr-nunito font-bold text-center">Suggestions</h2>
                     <div role="tablist" className="tabs tabs-boxed font-bold font-nunito">
                         <button
@@ -79,7 +80,10 @@ const TravelPlanPage: React.FC = () => {
 
                     <div className="mt-4">
                         {suggestionsTab === "members" && <SuggestedMemberList />}
-                        {suggestionsTab === "transports" && <TransportList />}
+                        {suggestionsTab === "transports" && <SuggestedTransportList
+                            key={travelPlan.id}
+                            travelPlan={travelPlan}
+                        />}
                         {suggestionsTab === "accommodations" && <AccomodationList />}
                     </div>
                 </div>
