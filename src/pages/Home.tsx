@@ -7,7 +7,7 @@ const Home = () => {
     const { pathname } = useLocation();
     return (
         <div>
-            <div className="container mx-auto max-w-6xl space-y-12 mt-4">
+            <div className="container mx-auto max-w-6xl min-h-screen space-y-12 mt-4">
                 <div id="global-toast-container" className="toast toast-top toast-end z-50" />
                 <Navbar />
                 <div>
