@@ -181,7 +181,6 @@ const TravelPlacePage: React.FC = () => {
         <div className="max-w-6xl mx-auto p-6">
             <div className="card bg-base-100 shadow-xl">
                 <div className="card-body">
-                    {/* Cover Image Section */}
                     <div className="mb-8">
                         {!isEditing.coverImage ? (
                             <div className="relative group">
@@ -237,8 +236,6 @@ const TravelPlacePage: React.FC = () => {
                             </div>
                         )}
                     </div>
-
-                    {/* Name Section */}
                     <div className="mb-6">
                         {!isEditing.name ? (
                             <div className="group relative">
@@ -286,8 +283,6 @@ const TravelPlacePage: React.FC = () => {
                             </div>
                         )}
                     </div>
-
-                    {/* Location Section */}
                     <div className="mb-6">
                         {!isEditing.location ? (
                             <div className="group relative">
@@ -347,8 +342,6 @@ const TravelPlacePage: React.FC = () => {
                             </div>
                         )}
                     </div>
-
-                    {/* Tags Section */}
                     <div className="mb-6">
                         {!isEditing.tags ? (
                             <div className="group relative">
@@ -408,8 +401,6 @@ const TravelPlacePage: React.FC = () => {
                             </div>
                         )}
                     </div>
-
-                    {/* Description Section */}
                     <div className="mb-6">
                         {!isEditing.description ? (
                             <div className="group relative">
@@ -464,8 +455,6 @@ const TravelPlacePage: React.FC = () => {
                             </div>
                         )}
                     </div>
-
-                    {/* Metadata */}
                     <div className="divider"></div>
                     <div className="text-sm text-base-content/60">
                         <p>Created: {new Date(travelPlaceData.created_at).toLocaleDateString()}</p>
@@ -473,8 +462,6 @@ const TravelPlacePage: React.FC = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Map Location Picker Modal */}
             <MapLocationPicker
                 isOpen={isMapOpen}
                 onClose={() => setIsMapOpen(false)}

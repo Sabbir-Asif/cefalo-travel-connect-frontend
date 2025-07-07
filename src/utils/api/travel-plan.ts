@@ -1,9 +1,14 @@
 import type { Lodge } from "../../types/Lodge";
 import type { TourLodge } from "../../types/TourLodge";
 import type { CreateTourTransport, TourTransportWithTransport } from "../../types/TourTransport";
-import type { TravelPlan } from "../../types/TravelPlan";
+import type { CreateTravelPlan, TravelPlan } from "../../types/TravelPlan";
 import type { UserResponse } from "../../types/User";
 import { api } from "../axios";
+
+export async function createTravelPlanAPI(data: CreateTravelPlan): Promise<TravelPlan> {
+  const res = await api.post(`/travel-plans`, data);
+  return res.data;
+}
 
 export async function getTravelPlansByPlannerId(plannerId: string) {
   const res = await api.get(`/travel-plans/search?planner_id=${plannerId}`);

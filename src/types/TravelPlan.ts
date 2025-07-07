@@ -22,3 +22,22 @@ export interface TravelPlan {
     created_at: Date;
     updated_at: Date;
 }
+
+export interface CreateTravelPlan {
+    title: string;
+    starting_point_name: string;
+    starting_point_location: {
+        lat: number;
+        long: number;
+    };
+    destination_name: string;
+    destination_location: {
+        lat: number;
+        long: number;
+    };
+    starting_date: Date | string;
+    ending_date: Date | string;
+    budget: number;
+    description: string;
+    status?: TravelPlanStatus;
+}

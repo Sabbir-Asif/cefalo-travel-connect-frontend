@@ -29,8 +29,14 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<LocationSuggestion | null>(null);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
+    const [showConfirmModal, setShowConfirmModal] = useState(false); // Use state instead of DOM modal
     const inputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Update query when value prop changes
+    useEffect(() => {
+        setQuery(value);
+    }, [value]);
 
     const searchDebounced = useCallback(async (searchQuery: string) => {
         if (searchQuery.length > 2) {
@@ -108,25 +114,29 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
     };
 
     const handleSuggestionSelect = (suggestion: LocationSuggestion) => {
+        console.log('Suggestion selected:', suggestion); // Debug log
         setSelectedLocation(suggestion);
         setQuery(suggestion.display_name);
         setShowSuggestions(false);
         setHighlightedIndex(-1);
-        
-        const modal = document.getElementById('location_confirm_modal') as HTMLDialogElement;
-        modal?.showModal();
+        setShowConfirmModal(true); // Use state instead of DOM modal
     };
 
     const handleConfirmLocation = () => {
         if (selectedLocation) {
+            console.log('Confirming location:', selectedLocation); // Debug log
             onLocationSelect({
                 name: selectedLocation.display_name,
                 lat: parseFloat(selectedLocation.lat),
                 long: parseFloat(selectedLocation.lon)
             });
-            const modal = document.getElementById('location_confirm_modal') as HTMLDialogElement;
-            modal?.close();
+            setShowConfirmModal(false);
         }
+    };
+
+    const handleCancelConfirm = () => {
+        setShowConfirmModal(false);
+        setSelectedLocation(null);
     };
 
     const clearInput = () => {
@@ -155,7 +165,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
             {label && (
                 <label className="label">
                     <span className="label-text font-medium">
-                        {label} <span className='text-red-400'>*</span>
+                        {label}
                         {required && <span className="text-error ml-1">*</span>}
                     </span>
                 </label>
@@ -260,8 +270,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
                     </div>
                 )}
             </div>
-
-            {/* Error or Helper Text */}
+            
             {(error || helperText) && (
                 <label className="label">
                     <span className={`label-text-alt ${error ? 'text-error' : 'text-base-content/60'}`}>
@@ -270,67 +279,70 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
                 </label>
             )}
             
-            <dialog id="location_confirm_modal" className="modal">
-                <div className="modal-box">
-                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        Confirm Location
-                    </h3>
-                    
-                    {selectedLocation && (
-                        <div className="space-y-4">
-                            <div className="bg-base-200 p-4 rounded-lg">
-                                <div className="flex items-start gap-3">
-                                    <span className="text-2xl">
-                                        {getLocationIcon(selectedLocation.type)}
-                                    </span>
-                                    <div className="flex-1">
-                                        <h4 className="font-semibold text-base mb-1">
-                                            {selectedLocation.display_name}
-                                        </h4>
-                                        <div className="space-y-2 text-sm text-base-content/70">
-                                            <div className="flex items-center gap-2">
-                                                <span className="font-medium">Type:</span>
-                                                <span className="badge badge-outline badge-sm capitalize">
-                                                    {selectedLocation.type}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="font-medium">Coordinates:</span>
-                                                <span className="font-mono text-xs bg-base-300 px-2 py-1 rounded">
-                                                    {parseFloat(selectedLocation.lat).toFixed(6)}, {parseFloat(selectedLocation.lon).toFixed(6)}
-                                                </span>
+            {/* Use conditional rendering instead of DOM modal */}
+            {showConfirmModal && (
+                <div className="modal modal-open">
+                    <div className="modal-box">
+                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            Confirm Location
+                        </h3>
+                        
+                        {selectedLocation && (
+                            <div className="space-y-4">
+                                <div className="bg-base-200 p-4 rounded-lg">
+                                    <div className="flex items-start gap-3">
+                                        <span className="text-2xl">
+                                            {getLocationIcon(selectedLocation.type)}
+                                        </span>
+                                        <div className="flex-1">
+                                            <h4 className="font-semibold text-base mb-1">
+                                                {selectedLocation.display_name}
+                                            </h4>
+                                            <div className="space-y-2 text-sm text-base-content/70">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-medium">Type:</span>
+                                                    <span className="badge badge-outline badge-sm capitalize">
+                                                        {selectedLocation.type}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-medium">Coordinates:</span>
+                                                    <span className="font-mono text-xs bg-base-300 px-2 py-1 rounded">
+                                                        {parseFloat(selectedLocation.lat).toFixed(6)}, {parseFloat(selectedLocation.lon).toFixed(6)}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        )}
+                        
+                        <div className="modal-action">
+                            <div className="flex gap-2">
+                                <button className="btn btn-ghost" onClick={handleCancelConfirm}>
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={handleConfirmLocation}
+                                >
+                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Confirm Location
+                                </button>
+                            </div>
                         </div>
-                    )}
-                    
-                    <div className="modal-action">
-                        <form method="dialog" className="flex gap-2">
-                            <button className="btn btn-ghost">Cancel</button>
-                            <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={handleConfirmLocation}
-                            >
-                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                                Confirm Location
-                            </button>
-                        </form>
                     </div>
+                    <div className="modal-backdrop" onClick={handleCancelConfirm}></div>
                 </div>
-                <form method="dialog" className="modal-backdrop">
-                    <button>close</button>
-                </form>
-            </dialog>
+            )}
         </div>
     );
 };

@@ -24,6 +24,7 @@ import ErrorPage from "../pages/ErrorPage";
 import RequestPage from "../components/travel-request/RequestPage";
 import SentRequest from "../components/travel-request/SentRequest";
 import RecievedRequest from "../components/travel-request/RecievedRequest";
+import CreateTravelPlanModal from "../components/travel-plan/CreateTravelPlanModal";
 
 const router = createBrowserRouter([
     {
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
                     {
                         path: 'create-travel-place',
                         element: <CreateTravelPageFormComponent />
+                    },
+                    {
+                        path: 'create-travel-plan',
+                        element: <CreateTravelPlanModal />
                     },
                     {
                         path: 'wishlists',

@@ -43,7 +43,7 @@ const TravelPlanPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-5 gap-8">
-                <div className="flex justify-start gap-8 col-span-3 border-r-">
+                <div className="flex justify-start gap-8 col-span-3 border-r-2">
                     <PlanMap
                         key={travelPlan.id}
                         travelPlan={travelPlan}
