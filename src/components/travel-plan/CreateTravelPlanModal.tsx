@@ -66,7 +66,7 @@ const CreateTravelPlanComponent: React.FC = () => {
         try {
             await createTravelPlanAPI(formData);
             toast.success("Travel Plan created successfully!");
-            navigate("/dashboard");
+            navigate("/");
         } catch (err) {
             console.error(err);
             setError("Failed to create travel plan");
