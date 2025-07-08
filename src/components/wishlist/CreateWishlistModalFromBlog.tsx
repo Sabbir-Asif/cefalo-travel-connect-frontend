@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { type Blog } from "../../types/Blog";
 import { type CreateWishlist } from "../../types/Wishlist";
 import { createWishlistAPI } from "../../utils/api/wishlist";
+import { uploadImageToCloudinary } from '../../utils/cloudinary';
+
 
 interface CreateWishlistModalFromBlogProps {
     blog: Blog;
@@ -21,6 +23,9 @@ const CreateWishlistModalFromBlog: React.FC<CreateWishlistModalFromBlogProps> = 
     const [coverImage, setCoverImage] = useState('');
     const [status, setStatus] = useState<'PRIVATE' | 'PUBLIC'>('PRIVATE');
     const [isLoading, setIsLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+
 
     const showToast = (message: string, type: 'success' | 'error' = 'success') => {
         const toast = document.createElement('div');
@@ -152,20 +157,68 @@ const CreateWishlistModalFromBlog: React.FC<CreateWishlistModalFromBlogProps> = 
                             onChange={(e) => setNote(e.target.value)}
                         ></textarea>
                     </div>
-
                     <div className="form-control">
                         <label className="label">
-                            <span className="label-text">Cover Image URL</span>
+                            <span className="label-text">Cover Image</span>
                         </label>
+
                         <input
                             type="url"
                             placeholder="Enter image URL (optional)"
-                            className="input input-bordered w-full"
+                            className="input input-bordered w-full mb-2"
                             value={coverImage}
                             onChange={(e) => setCoverImage(e.target.value)}
                         />
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+
+                                setUploading(true);
+                                setUploadError(null);
+
+                                try {
+                                    const url = await uploadImageToCloudinary(file);
+                                    setCoverImage(url);
+                                    showToast("Image uploaded successfully!");
+                                } catch (err) {
+                                    console.error(err);
+                                    setUploadError((err as Error).message);
+                                    showToast("Image upload failed", "error");
+                                } finally {
+                                    setUploading(false);
+                                }
+                            }}
+                            className="file-input file-input-bordered w-full"
+                        />
+
+                        {uploading && (
+                            <label className="label">
+                                <span className="label-text-alt text-info">Uploading...</span>
+                            </label>
+                        )}
+
+                        {uploadError && (
+                            <label className="label">
+                                <span className="label-text-alt text-error">{uploadError}</span>
+                            </label>
+                        )}
+
+                        {coverImage && (
+                            <div className="mt-2">
+                                <img
+                                    src={coverImage}
+                                    alt="Cover Preview"
+                                    className="rounded-md shadow-md max-h-40 object-contain"
+                                />
+                            </div>
+                        )}
+
                         <label className="label">
-                            <span className="label-text-alt">Leave empty to use blog image</span>
+                            <span className="label-text-alt">Leave empty to use travel place image</span>
                         </label>
                     </div>
 

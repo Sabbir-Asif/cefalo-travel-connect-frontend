@@ -5,6 +5,8 @@ import { LocationSearch } from '../location/LocationSearch';
 import { TagInput } from '../blog/TagInput';
 import { createTravelPlaceAPI } from '../../utils/api/travel-place';
 import type { CreateTravelPlace } from '../../types/TravelPlace';
+import { uploadImageToCloudinary } from '../../utils/cloudinary';
+
 
 const CreateTravelPageFormComponent: React.FC = () => {
     const navigate = useNavigate();
@@ -20,6 +22,9 @@ const CreateTravelPageFormComponent: React.FC = () => {
     const [isMapOpen, setIsMapOpen] = useState(false);
     const [creating, setCreating] = useState(false);
     const [error, setError] = useState<string>('');
+    const [uploading, setUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+
 
     const handleLocationSelect = (location: { name: string; lat: number; long: number }) => {
         setFormData(prev => ({
@@ -157,32 +162,70 @@ const CreateTravelPageFormComponent: React.FC = () => {
                                 </button>
                             </div>
                         </div>
-
                         <div className="form-control">
                             <label className="label">
-                                <span className="label-text font-medium">Cover Image URL</span>
+                                <span className="label-text font-medium">Cover Image</span>
                             </label>
+
                             <input
                                 type="url"
-                                value={formData.cover_image}
-                                onChange={(e) => setFormData(prev => ({ ...prev, cover_image: e.target.value }))}
-                                className="input input-bordered w-full"
+                                value={formData.cover_image || ''}
+                                onChange={(e) =>
+                                    setFormData((prev) => ({ ...prev, cover_image: e.target.value }))
+                                }
                                 placeholder="https://example.com/image.jpg"
+                                className="input input-bordered w-full mb-2"
                             />
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+
+                                    setUploading(true);
+                                    setUploadError(null);
+
+                                    try {
+                                        const url = await uploadImageToCloudinary(file);
+                                        setFormData((prev) => ({ ...prev, cover_image: url }));
+                                    } catch (err) {
+                                        setUploadError((err as Error).message);
+                                    } finally {
+                                        setUploading(false);
+                                    }
+                                }}
+                                className="file-input file-input-bordered w-full"
+                            />
+
+                            {uploading && (
+                                <label className="label">
+                                    <span className="label-text-alt text-info">Uploading...</span>
+                                </label>
+                            )}
+
+                            {uploadError && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">{uploadError}</span>
+                                </label>
+                            )}
+
                             {formData.cover_image && (
-                                <div className="mt-4">
+                                <div className="mt-2">
                                     <img
                                         src={formData.cover_image}
-                                        alt="Preview"
-                                        className="w-full h-48 object-cover rounded-lg"
-                                        onError={(e) => {
-                                            const target = e.target as HTMLImageElement;
-                                            target.style.display = 'none';
-                                        }}
+                                        alt="Cover Preview"
+                                        className="rounded-md shadow-md max-h-48 object-contain"
                                     />
                                 </div>
                             )}
+
+                            <label className="label">
+                                <span className="label-text-alt">You can upload or paste an image URL</span>
+                            </label>
                         </div>
+
 
                         <div className="form-control">
                             <label className="label">

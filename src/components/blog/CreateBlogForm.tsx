@@ -6,6 +6,7 @@ import type { Blog, CreateBlog } from '../../types/Blog';
 import { createBlogAPI } from '../../utils/api/blog';
 import { isAxiosError } from 'axios';
 import { LocationSearch } from '../location/LocationSearch';
+import { uploadImageToCloudinary } from '../../utils/cloudinary';
 
 interface CreateBlogFormProps {
     onSuccess?: (blog: Blog) => void;
@@ -29,6 +30,9 @@ export const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
     const [isMapOpen, setIsMapOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [uploading, setUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+
 
     const validateForm = (): boolean => {
         const newErrors: Record<string, string> = {};
@@ -183,22 +187,71 @@ export const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
                             placeholder="Add tags to help categorize your blog..."
                             maxTags={10}
                         />
-
+                        
                         <div className="form-control">
                             <label className="label">
-                                <span className="label-text font-medium">Cover Image URL (Optional)</span>
+                                <span className="label-text font-medium">Cover Image</span>
                             </label>
+
                             <input
                                 type="url"
                                 value={formData.cover_image || ''}
-                                onChange={(e) => setFormData(prev => ({ ...prev, cover_image: e.target.value }))}
+                                onChange={(e) =>
+                                    setFormData((prev) => ({ ...prev, cover_image: e.target.value }))
+                                }
                                 placeholder="https://example.com/image.jpg"
-                                className="input input-bordered w-full"
+                                className="input input-bordered w-full mb-2"
                             />
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+
+                                    setUploading(true);
+                                    setUploadError(null);
+
+                                    try {
+                                        const url = await uploadImageToCloudinary(file);
+                                        setFormData((prev) => ({ ...prev, cover_image: url }));
+                                    } catch (err) {
+                                        setUploadError((err as Error).message);
+                                    } finally {
+                                        setUploading(false);
+                                    }
+                                }}
+                                className="file-input file-input-bordered w-full"
+                            />
+
+                            {uploading && (
+                                <label className="label">
+                                    <span className="label-text-alt text-info">Uploading...</span>
+                                </label>
+                            )}
+
+                            {uploadError && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">{uploadError}</span>
+                                </label>
+                            )}
+
+                            {formData.cover_image && (
+                                <div className="mt-2">
+                                    <img
+                                        src={formData.cover_image}
+                                        alt="Cover Preview"
+                                        className="rounded-md shadow-md max-h-48 object-contain"
+                                    />
+                                </div>
+                            )}
+
                             <label className="label">
-                                <span className="label-text-alt">Add a cover image URL for your blog</span>
+                                <span className="label-text-alt">You can upload or paste an image URL</span>
                             </label>
                         </div>
+
                         {errors.submit && (
                             <div className="alert alert-error">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
