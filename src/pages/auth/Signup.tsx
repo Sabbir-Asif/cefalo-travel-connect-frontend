@@ -6,7 +6,6 @@ const Signup: React.FC = () => {
             className="relative h-screen bg-[url('/src/assets/images/Nilgiri.webp')] bg-center bg-cover bg-no-repeat"
             style={{ backgroundPosition: "center", backgroundSize: "cover" }}
         >
-            {/* <div className="absolute inset-0 bg-black bg-opacity-40"></div> */}
 
             <div className="relative z-10 flex items-center justify-center h-full px-4 text-white space-y-8 max-w-6xl mx-auto gap-8 text-center">
                 <SignupForm />

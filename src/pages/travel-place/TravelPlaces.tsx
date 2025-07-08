@@ -7,8 +7,6 @@ import { useNavigate } from "react-router";
 
 const TravelPlaces: React.FC = () => {
     const [travelPlaces, setTravelPlaces] = useState<TravelPlaceType[]>([]);
-    // const [pageNum, setPageNum] = useState<number>(1);
-    // const [limit, setLimit] = useState<number>(4);
     const navigate = useNavigate();
 
     const handleClick = () => {

@@ -17,10 +17,10 @@ const RequestCard: React.FC<{ request: TravelRequestWithUsers, type: string }> =
             </div>
 
             {open && (
-                <RequestModal 
-                request={request} 
-                onClose={() => setOpen(false)}
-                type={type}
+                <RequestModal
+                    request={request}
+                    onClose={() => setOpen(false)}
+                    type={type}
                 />
             )}
         </div>

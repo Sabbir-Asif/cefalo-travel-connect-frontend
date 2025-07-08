@@ -112,7 +112,7 @@ export const MapLocationPicker: React.FC<MapLocationPickerProps> = ({
                         className="btn btn-sm btn-circle btn-ghost"
                         onClick={handleClose}
                     >
-                        ✕
+                        x
                     </button>
                 </div>
 

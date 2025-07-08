@@ -33,15 +33,15 @@ const WishlistPage: React.FC = () => {
 
     const handleStatusToggle = async () => {
         if (!wishlist.id) return;
-        
+
         const newStatus = wishlist.status === 'PUBLIC' ? 'PRIVATE' : 'PUBLIC';
-        
+
         const modal = document.getElementById('status_modal') as HTMLDialogElement;
         modal?.showModal();
-        
+
         const confirmBtn = document.getElementById('confirm_status_change');
         const cancelBtn = document.getElementById('cancel_status_change');
-        
+
         const handleConfirm = async () => {
             setIsUpdating(true);
             try {
@@ -54,11 +54,11 @@ const WishlistPage: React.FC = () => {
                 modal?.close();
             }
         };
-        
+
         const handleCancel = () => {
             modal?.close();
         };
-        
+
         confirmBtn?.addEventListener('click', handleConfirm, { once: true });
         cancelBtn?.addEventListener('click', handleCancel, { once: true });
     };
@@ -68,7 +68,7 @@ const WishlistPage: React.FC = () => {
             setIsEditingNote(false);
             return;
         }
-        
+
         setIsUpdating(true);
         try {
             const updatedWishlist = await updateWishlistAPI(wishlist.id, { note: noteValue });
@@ -110,8 +110,8 @@ const WishlistPage: React.FC = () => {
         <div className="min-h-screen bg-base-100 font-nunito">
             <div className="relative h-80 bg-gradient-to-r from-primary to-secondary">
                 {wishlist.cover_image ? (
-                    <img 
-                        src={wishlist.cover_image} 
+                    <img
+                        src={wishlist.cover_image}
                         alt={wishlist.title}
                         className="w-full h-full object-cover"
                     />
@@ -119,15 +119,15 @@ const WishlistPage: React.FC = () => {
                     <div className="w-full h-full bg-gradient-to-r from-primary to-secondary"></div>
                 )}
                 <div className="absolute inset-0 bg-black/30"></div>
-                
+
                 <div className="absolute top-4 right-4">
                     <div className="flex items-center gap-2">
                         <span className="text-white text-sm font-medium">
                             {wishlist.status === 'PUBLIC' ? 'Public' : 'Private'}
                         </span>
-                        <input 
-                            type="checkbox" 
-                            className="toggle toggle-success" 
+                        <input
+                            type="checkbox"
+                            className="toggle toggle-success"
                             checked={wishlist.status === 'PUBLIC'}
                             onChange={handleStatusToggle}
                             disabled={isUpdating}
@@ -211,7 +211,7 @@ const WishlistPage: React.FC = () => {
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="text-lg font-semibold">Note</h3>
                                 {!isEditingNote && (
-                                    <button 
+                                    <button
                                         className="btn btn-sm btn-ghost"
                                         onClick={() => setIsEditingNote(true)}
                                     >
@@ -222,10 +222,10 @@ const WishlistPage: React.FC = () => {
                                     </button>
                                 )}
                             </div>
-                            
+
                             {isEditingNote ? (
                                 <div className="space-y-3">
-                                    <textarea 
+                                    <textarea
                                         className="textarea textarea-bordered w-full"
                                         value={noteValue}
                                         onChange={(e) => setNoteValue(e.target.value)}
@@ -233,7 +233,7 @@ const WishlistPage: React.FC = () => {
                                         rows={3}
                                     />
                                     <div className="flex gap-2">
-                                        <button 
+                                        <button
                                             className="btn btn-primary btn-sm"
                                             onClick={handleNoteUpdate}
                                             disabled={isUpdating}
@@ -249,7 +249,7 @@ const WishlistPage: React.FC = () => {
                                                 </>
                                             )}
                                         </button>
-                                        <button 
+                                        <button
                                             className="btn btn-ghost btn-sm"
                                             onClick={handleNoteCancel}
                                             disabled={isUpdating}

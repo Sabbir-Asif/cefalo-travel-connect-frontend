@@ -34,8 +34,7 @@ const SecondaryNav: React.FC = () => {
           key={to}
           to={to}
           className={({ isActive }) =>
-            `p-2 font-nunito font-bold hover:bg-gray-300 transition ${
-              isActive ? "border-b-2 border-primary text-primary" : ""
+            `p-2 font-nunito font-bold hover:bg-gray-300 transition ${isActive ? "border-b-2 border-primary text-primary" : ""
             }`
           }
         >

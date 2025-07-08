@@ -38,9 +38,9 @@ const WIshlistCard: React.FC<WishlistCardProp> = ({ wishlist }) => {
                     </div>
                 </div>
             </div>
-            <button 
-            className='btn bg-black font-nunito font-bold text-white'
-            onClick={handleNavigate}
+            <button
+                className='btn bg-black font-nunito font-bold text-white'
+                onClick={handleNavigate}
             >
                 View Details
             </button>

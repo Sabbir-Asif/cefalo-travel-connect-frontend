@@ -553,26 +553,11 @@ const BlogPage: React.FC = () => {
                         >
                             Accommodations
                         </button>
-                        {/* <button
-                            role="tab"
-                            className={`tab ${activeTab === "foods" ? "tab-active" : ""}`}
-                            onClick={() => setActiveTab("foods")}
-                        >
-                            Foods
-                        </button>
-                        <button
-                            role="tab"
-                            className={`tab ${activeTab === "insights" ? "tab-active" : ""}`}
-                            onClick={() => setActiveTab("insights")}
-                        >
-                            Amenities
-                        </button> */}
                     </div>
 
                     <div className="mt-4">
                         {activeTab === "transports" && <TransportList />}
                         {activeTab === "accommodations" && <AccomodationList />}
-                        {/* {activeTab === "foods" && <FoodList />} */}
                     </div>
                 </div>
             </section>

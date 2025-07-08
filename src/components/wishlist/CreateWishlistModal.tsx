@@ -9,10 +9,10 @@ interface CreateWishlistModalProps {
     onClose: () => void;
 }
 
-const CreateWishlistModal: React.FC<CreateWishlistModalProps> = ({ 
-    travelPlace, 
-    isOpen, 
-    onClose 
+const CreateWishlistModal: React.FC<CreateWishlistModalProps> = ({
+    travelPlace,
+    isOpen,
+    onClose
 }) => {
     const [title, setTitle] = useState('');
     const [travelDate, setTravelDate] = useState('');
@@ -31,10 +31,10 @@ const CreateWishlistModal: React.FC<CreateWishlistModalProps> = ({
             </svg>
             <span>${message}</span>
         `;
-        
+
         const toastContainer = document.querySelector('.toast') || document.body;
         toastContainer.appendChild(toast);
-        
+
         setTimeout(() => {
             toast.remove();
         }, 3000);
@@ -42,7 +42,7 @@ const CreateWishlistModal: React.FC<CreateWishlistModalProps> = ({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!title.trim() || !travelDate) {
             showToast('Please fill in all required fields', 'error');
             return;
@@ -90,7 +90,7 @@ const CreateWishlistModal: React.FC<CreateWishlistModalProps> = ({
         <div className="modal modal-open">
             <div className="modal-box max-w-md">
                 <h3 className="font-bold text-lg mb-4">Add to Wishlist</h3>
-                
+
                 <div className="mb-4 p-3 bg-gray-50 rounded-lg">
                     <p className="text-sm text-gray-600">Location:</p>
                     <p className="font-medium">{travelPlace.name}</p>

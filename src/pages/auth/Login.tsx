@@ -11,8 +11,8 @@ const Login: React.FC = () => {
             <div className="relative z-10 flex items-center justify-center h-full px-4 text-white space-y-8 max-w-6xl mx-auto gap-8 text-center">
                 <LoginForm />
                 <div className="text-5xl font-bold text-left leading-14">
-                    THE GOAL OF LIFE IS <br /> 
-                    <span className="">LIVING IN AGREEMENT</span> <br /> 
+                    THE GOAL OF LIFE IS <br />
+                    <span className="">LIVING IN AGREEMENT</span> <br />
                     <span className="underline">WITH NATURE</span>
                 </div>
             </div>

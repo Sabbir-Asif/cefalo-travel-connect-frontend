@@ -19,9 +19,9 @@ const CreateBlogPage: React.FC = () => {
   };
 
   return (
-      <div className="">
-        <CreateBlogForm onSuccess={handleSuccess} onError={handleError} />
-      </div>
+    <div className="">
+      <CreateBlogForm onSuccess={handleSuccess} onError={handleError} />
+    </div>
   );
 };
 

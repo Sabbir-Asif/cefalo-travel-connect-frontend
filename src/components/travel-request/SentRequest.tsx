@@ -21,15 +21,15 @@ const SentRequest: React.FC = () => {
 
         fetchRequests();
 
-    },[user?.id])
+    }, [user?.id])
 
-    if(loading){
+    if (loading) {
         return <div>
             Loading ...
         </div>
     }
 
-    if(requests.length === 0) {
+    if (requests.length === 0) {
         return <div>
             No request found
         </div>
@@ -40,10 +40,10 @@ const SentRequest: React.FC = () => {
             <h2 className="font-nunito font-bold mb-2">Sent Requests</h2>
             {
                 requests.map(request => (
-                    <RequestCard 
-                    key={request.id}
-                    request={request}
-                    type="sent"
+                    <RequestCard
+                        key={request.id}
+                        request={request}
+                        type="sent"
                     />
                 ))
             }
