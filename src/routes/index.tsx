@@ -26,6 +26,8 @@ import SentRequest from "../components/travel-request/SentRequest";
 import RecievedRequest from "../components/travel-request/RecievedRequest";
 import CreateTravelPlanModal from "../components/travel-plan/CreateTravelPlanModal";
 import JourneyPage from "../components/travel-plan/JourneyPage";
+import ResetPasswordConfirm from "../pages/auth/ResetPasswordConfirm";
+import RequestPasswordReset from "../pages/auth/RequestPasswordReset";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
     {
         path: '/signup',
         element: <Signup />
+    },
+    {
+        path: "/reset-password",
+        element: <RequestPasswordReset />
+    },
+    {
+        path: "/reset-password/confirm",
+        element: <ResetPasswordConfirm />
     },
     {
         path: '/',

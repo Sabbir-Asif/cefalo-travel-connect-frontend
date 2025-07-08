@@ -32,3 +32,12 @@ export async function getMeAPI(): Promise<UserResponse> {
   const res = await api.get("/users/me");
   return res.data;
 }
+
+export async function requestPasswordResetAPI(email: string): Promise<void> {
+  await api.post("/auth/reset-password/request", { email });
+}
+
+export async function resetPasswordAPI(token: string, password: string): Promise<void> {
+  console.log({token, password});
+  await api.post("/auth/reset-password/reset", { token, password });
+}

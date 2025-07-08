@@ -116,7 +116,7 @@ const LoginForm: React.FC = () => {
 
         <div className="mt-8 text-center">
           <Link
-            to="/forget-password"
+            to="/reset-password"
             className="text-sm text-white/70 hover:text-white transition-colors duration-200 hover:underline"
           >
             Forgot your password?
