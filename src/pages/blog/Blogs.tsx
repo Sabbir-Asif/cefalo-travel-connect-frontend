@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getAllBlogsAPI } from '../../utils/api/blog';
-import type { Blog as BlogType } from '../../types/Blog';
+import type { BlogResponse } from '../../types/Blog';
 import BlogCard from '../../components/blog/BlogCard';
 import { FaPenNib } from "react-icons/fa";
 import { useNavigate } from 'react-router';
 
 const Blogs = () => {
-    const [blogs, setBlogs] = useState<BlogType[]>([]);
+    const [blogs, setBlogs] = useState<BlogResponse[]>([]);
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -35,7 +35,7 @@ const Blogs = () => {
                     </div>
                 </button>
             </div>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 {blogs.map((blog) => (
                     <BlogCard key={blog.id} blog={blog} />
                 ))}

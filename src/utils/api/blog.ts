@@ -1,4 +1,4 @@
-import type { Blog, BlogDetailsResponse, CreateBlog } from "../../types/Blog";
+import type { Blog, BlogDetailsResponse, BlogResponse, CreateBlog } from "../../types/Blog";
 import type { BlogFood } from "../../types/BlogFood";
 import type { BlogLodge } from "../../types/BlogLodge";
 import type { BlogTransport } from "../../types/BlogTransport";
@@ -7,7 +7,7 @@ import type { Lodge } from "../../types/Lodge";
 import type { Transport } from "../../types/Transport";
 import { api } from "../axios";
 
-export async function getAllBlogsAPI(): Promise<Blog[]> {
+export async function getAllBlogsAPI(): Promise<BlogResponse[]> {
   const res = await api.get('/blogs');
   return res.data;
 }

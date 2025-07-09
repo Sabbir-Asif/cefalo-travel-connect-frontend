@@ -24,6 +24,26 @@ export interface Blog {
     updated_at: Date;
 }
 
+export interface BlogResponse {
+    id: string;
+    title: string;
+    userId: string;
+    user: UserResponse;
+    locationName: string;
+    location_points: {
+        lat: number;
+        long: number;
+    };
+    description: string;
+    cover_image: string | null;
+    status: BlogStatus;
+    tags: string[];
+    images: string[];
+    videos: string[];
+    created_at: Date;
+    updated_at: Date;
+}
+
 export interface CreateBlog {
     title: string;
     locationName: string;
