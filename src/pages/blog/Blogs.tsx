@@ -24,9 +24,9 @@ const Blogs = () => {
     return (
         <div className="p-6">
             <div className='flex items-center justify-between'>
-                <h2 className="text-4xl text-center font-nunito font-black mb-16">Explore Blogs</h2>
+                <h2 className="text-3xl text-gray-600 text-center font-nunito font-black mb-12">Explore Blogs</h2>
                 <button
-                    className='bg-black text-white p-2 font-pacifico rounded-full'
+                    className='bg-gray-700 text-white p-2 font-pacifico rounded-full'
                     onClick={handleClick}
                 >
                     <div className='flex items-center gap-2'>

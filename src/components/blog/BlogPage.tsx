@@ -20,6 +20,7 @@ import { useAuth } from '../../context/useAuth';
 import { reactToBlogAPI, removeReactionAPI, getUsersWhoReactedAPI } from "../../utils/api/blog";
 import { FaHeart } from "react-icons/fa";
 import ReactedUsersModal from './ReactedUsersModal';
+import CommentList from './comment/CommentList';
 
 type TabOption = "transports" | "accommodations" | "foods" | "insights";
 
@@ -628,6 +629,7 @@ const BlogPage: React.FC = () => {
                         {activeTab === "accommodations" && <AccomodationList />}
                     </div>
                 </div>
+                <CommentList blogId={blog.id} />
             </section>
         </div>
     );

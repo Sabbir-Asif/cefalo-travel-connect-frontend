@@ -2,6 +2,7 @@ import type { Blog, BlogDetailsResponse, BlogResponse, CreateBlog } from "../../
 import type { BlogFood } from "../../types/BlogFood";
 import type { BlogLodge } from "../../types/BlogLodge";
 import type { BlogTransport } from "../../types/BlogTransport";
+import type { CommentResponse, CreateComment, UpdateComment } from "../../types/Comment";
 import type { Food } from "../../types/Food";
 import type { LikedBlog, LikedBlogResponse } from "../../types/LikedBlog";
 import type { Lodge } from "../../types/Lodge";
@@ -103,4 +104,24 @@ export async function removeReactionAPI(blogId: string): Promise<number> {
 export async function getUsersWhoReactedAPI(blogId: string): Promise<UserResponse[]> {
   const res = await api.get(`/blogs/${blogId}/react`);
   return res.data;
+}
+
+export async function createCommentAPI(blogId: string, data: CreateComment): Promise<Comment> {
+  const res = await api.post(`/blogs/${blogId}/insights`, data);
+  return res.data;
+}
+
+export async function getCommentsForBlogAPI(blogId: string): Promise<CommentResponse[]> {
+  const res = await api.get(`/blogs/${blogId}/insights`);
+  return res.data;
+}
+
+export async function UpdateCommentAPI(commentId: string, data: UpdateComment): Promise<Comment> {
+  const res = await api.put(`/blogs/insights/${commentId}`, data);
+  return res.data;
+}
+
+export async function deleteCommentAPI(commentId: string): Promise<number> {
+  const res = await api.delete(`/blogs/insights/${commentId}`);
+  return res.status;
 }

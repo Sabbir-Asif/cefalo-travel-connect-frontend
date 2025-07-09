@@ -28,14 +28,14 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
                 <div className='flex items-center justify-between p-4'>
                     <div className='flex items-center gap-3'>
                         <div className='h-12 w-12 rounded-full'>
-                            {blog.user.displayPicture &&
+                            {blog.user?.displayPicture &&
                                 <img src={blog.user.displayPicture} alt="image"
                                     className='rounded-full h-12 w-12 object-cover'
                                 />
                             }
                         </div>
                         <div>
-                            <p className='text-lg font-extrabold font-nunito text-gray-900 hover:text-blue-600'>{blog.user.name}</p>
+                            <p className='text-lg font-extrabold font-nunito text-gray-900 hover:text-blue-600'>{blog.user?.name}</p>
                             <p className='text-sm text-gray-500'>{formatDistanceToNow(new Date(blog.created_at), { addSuffix: true })}</p>
                         </div>
                     </div>
