@@ -3,8 +3,10 @@ import type { BlogFood } from "../../types/BlogFood";
 import type { BlogLodge } from "../../types/BlogLodge";
 import type { BlogTransport } from "../../types/BlogTransport";
 import type { Food } from "../../types/Food";
+import type { LikedBlog, LikedBlogResponse } from "../../types/LikedBlog";
 import type { Lodge } from "../../types/Lodge";
 import type { Transport } from "../../types/Transport";
+import type { UserResponse } from "../../types/User";
 import { api } from "../axios";
 
 export async function getAllBlogsAPI(): Promise<BlogResponse[]> {
@@ -82,3 +84,23 @@ export async function deleteFoodFromBlogAPI(blogId: string, foodId: string): Pro
   return res.status;
 }
 
+export async function reactToBlogAPI(userId: string, blogId: string): Promise<LikedBlogResponse> {
+  const data: LikedBlog = {
+    user_id: userId,
+    blog_id: blogId,
+    reaction_name: 'inspired'
+  }
+
+  const res = await api.post(`/blogs/react`, data);
+  return res.data;
+}
+
+export async function removeReactionAPI(blogId: string): Promise<number> {
+  const res = await api.delete(`/blogs/${blogId}/react`);
+  return res.status;
+}
+
+export async function getUsersWhoReactedAPI(blogId: string): Promise<UserResponse[]> {
+  const res = await api.get(`/blogs/${blogId}/react`);
+  return res.data;
+}

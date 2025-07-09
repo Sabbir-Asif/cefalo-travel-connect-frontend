@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
+import { toast } from "react-toastify";
 import { MapLocationPicker } from '../location/MapLocationPicker';
 import { MarkdownEditor } from '../markdown/MarkdownEditor';
 import { TagInput } from './TagInput';
@@ -15,11 +16,21 @@ import type { UserResponse } from '../../types/User';
 import { LocationSearch } from '../location/LocationSearch';
 import TransportList from './transports/TransportList';
 import AccomodationList from './lodges/AccomodationList';
+import { useAuth } from '../../context/useAuth';
+import { reactToBlogAPI, removeReactionAPI, getUsersWhoReactedAPI } from "../../utils/api/blog";
+import { FaHeart } from "react-icons/fa";
+import ReactedUsersModal from './ReactedUsersModal';
 
 type TabOption = "transports" | "accommodations" | "foods" | "insights";
 
 const BlogPage: React.FC = () => {
     const { blogId } = useParams<{ blogId: string }>();
+
+    const { user } = useAuth();
+    const [hasReacted, setHasReacted] = useState(false);
+    const [reactionUsers, setReactionUsers] = useState<UserResponse[]>([]);
+    const [isReactionModalOpen, setIsReactionModalOpen] = useState(false);
+
     const [blogData, setBlogData] = useState<{
         blog: Blog;
         transports: Transport[];
@@ -85,6 +96,16 @@ const BlogPage: React.FC = () => {
                     locationPoints: data.blog.location_points,
                     status: data.blog.status
                 });
+
+                if (user && blogId) {
+                    const fetchReactionStatus = async () => {
+                        const users = await getUsersWhoReactedAPI(blogId);
+                        setReactionUsers(users);
+                        setHasReacted(users.some(u => u.id === user.id));
+                    };
+                    fetchReactionStatus();
+                }
+
             } catch (err) {
                 setError('Failed to load blog data');
                 console.error('Error loading blog:', err);
@@ -96,7 +117,7 @@ const BlogPage: React.FC = () => {
         if (blogId) {
             loadBlogData();
         }
-    }, [blogId]);
+    }, [blogId, user]);
 
     const handleLocationSelect = (location: { name: string; lat: number; long: number }) => {
         setEditData(prev => ({
@@ -108,6 +129,28 @@ const BlogPage: React.FC = () => {
             }
         }));
     };
+
+    const handleToggleReaction = async () => {
+        try {
+            if (!blogId || !user) return;
+
+            if (hasReacted) {
+                await removeReactionAPI(blogId);
+                setReactionUsers(prev => prev.filter(u => u.id !== user.id));
+                setHasReacted(false);
+                toast.info("Reaction removed.");
+            } else {
+                await reactToBlogAPI(user.id, blogId);
+                setReactionUsers(prev => [...prev, user]);
+                setHasReacted(true);
+                toast.success("You reacted this blog!");
+            }
+        } catch (err) {
+            toast.error("Failed to update reaction.");
+            console.error(err);
+        }
+    };
+
 
     const handleUpdate = async (field: keyof typeof isEditing) => {
         if (!blogData) return;
@@ -209,7 +252,7 @@ const BlogPage: React.FC = () => {
     const { blog } = blogData;
 
     return (
-        <div className="max-w-6xl mx-auto p-6">
+        <div className="max-w-6xl mx-auto p-6 font-nunito">
             <div className="card bg-base-100 shadow-xl">
                 <div className="card-body">
                     <div className="mb-8">
@@ -470,8 +513,8 @@ const BlogPage: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="border-t pt-6 mt-8">
-                        <div className="flex flex-wrap gap-4 text-sm text-base-content/60">
+                    <div className="border-t pt-6 mt-8 flex justify-between items-center">
+                        <div className="flex gap-4 items-center">
                             <div className="flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -528,6 +571,25 @@ const BlogPage: React.FC = () => {
                                 )}
                             </div>
                         </div>
+                        <section>
+                            <div className="flex items-center gap-4">
+                                <button
+                                    className="flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
+                                    onClick={handleToggleReaction}
+                                >
+                                    <FaHeart className={`w-5 h-5 ${hasReacted ? "text-red-500" : "text-gray-400"}`} />
+                                    <span className="text-lg font-semibold">{hasReacted ? "Liked" : "React"}</span>
+                                </button>
+
+                                <button
+                                    className="text-lg text-blue-600 hover:underline"
+                                    onClick={() => setIsReactionModalOpen(true)}
+                                >
+                                    View reactions ({reactionUsers.length})
+                                </button>
+                            </div>
+
+                        </section>
                     </div>
                 </div>
             </div>
@@ -536,6 +598,12 @@ const BlogPage: React.FC = () => {
                 onClose={() => setIsMapOpen(false)}
                 onLocationSelect={handleLocationSelect}
             />
+            <ReactedUsersModal
+                isOpen={isReactionModalOpen}
+                onClose={() => setIsReactionModalOpen(false)}
+                users={reactionUsers}
+            />
+
             <section className='min-h-screen'>
                 <div className="mt-6">
                     <div role="tablist" className="tabs tabs-boxed font-bold font-nunito">
